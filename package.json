@@ -1,0 +1,29 @@
+{
+  "name": "aoeba_qd",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-brands-svg-icons": "^6.3.0",
+    "@fortawesome/free-regular-svg-icons": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/vue-fontawesome": "latest-3",
+    "bootstrap": "^3.3.4",
+    "pinia": "^2.0.32",
+    "tdesign-vue-next": "^1.1.1",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "node-sass": "^8.0.0",
+    "sass": "^1.58.3",
+    "sass-loader": "^13.2.0",
+    "vite": "^4.1.4"
+  }
+}
