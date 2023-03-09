@@ -1,0 +1,29 @@
+$select_text: #333;
+$select_text_bg: #ccc;
+$text: #eee;
+$text_alt: #ccc;
+$link: lightblue;
+$link_hover: #51aded;
+$border: #ccc;
+$tag_background: #252d38df;
+$card_background: #282c34dd;
+$page_background: #181c27;
+$info_background: #3c495bbb;
+$navbar_desktop: #181c27cc;
+$navbar_mobile: #16171ae6;
+
+$theme-dark: (
+    select_text: $select_text,
+    select_text_bg: $select_text_bg,
+    text: $text,
+    text_alt: $text_alt,
+    link: $link,
+    link_hover: $link_hover,
+    border: $border,
+    tag_background: $tag_background,
+    card_background: $card_background,
+    page_background: $page_background,
+    info_background: $info_background,
+    navbar_desktop: $navbar_desktop,
+    navbar_mobile: $navbar_mobile,
+);

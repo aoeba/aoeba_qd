@@ -1,0 +1,355 @@
+@charset "UTF-8";
+
+body {
+    @include themeify {
+        /******************* Color ********************/
+        * {
+            &::-webkit-selection {
+                color: themed(select_text);
+                background: themed(select_text_bg);
+            }
+
+            &::-moz-selection {
+                color: themed(select_text);
+                background: themed(select_text_bg);
+            }
+
+            &::selection {
+                color: themed(select_text);
+                background: themed(select_text_bg);
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        ol,
+        ul,
+        p {
+            color: themed(text);
+        }
+
+        // 改成vue时，以#kratos-page开始
+        body,
+        #kratos-page {
+            background-color: themed(page_background);
+        }
+
+        h2.title-h2 {
+            background-color: themed(info_background);
+        }
+
+        a {
+            color: themed(link);
+        }
+
+        blockquote {
+            background-color: themed(info_background);
+            border-color: themed(border);
+
+            p {
+                color: themed(text);
+            }
+        }
+
+        table {
+            th {
+                color: themed(text);
+                background-color: themed(info_background);
+            }
+        }
+
+        .kratos-hentry {
+            background-color: themed(tag_background);
+        }
+
+        .kratos-entry-border-new {
+            a,
+            i {
+                color: themed(text);
+            }
+
+            .kratos-post-meta-new {
+                border-top: 1px solid themed(border);
+                background: themed(tag_background);
+            }
+
+            .kratos-status {
+                i {
+                    color: themed(text_alt);
+                }
+
+                p a {
+                    color: themed(link);
+
+                    &:hover {
+                        color: themed(link_hover);
+                    }
+                }
+            }
+        }
+
+        .kratos-entry-header {
+            span,
+            a {
+                color: themed(text);
+            }
+        }
+
+        ul.kratos-post-meta {
+            color: themed(text_alt);
+            span,
+            a {
+                color: themed(text_alt);
+            }
+        }
+
+        .kratos-post-content {
+            p,
+            table td {
+                color: themed(text);
+            }
+        }
+
+        .kratos-post-inner {
+            .kratos-copyright {
+                background-color: themed(info_background);
+
+                h5 {
+                    color: themed(text);
+                }
+
+                a {
+                    color: themed(text);
+                }
+            }
+        }
+
+        .kratos-entry-footer {
+            .footer-tag a {
+                color: themed(text);
+                background-color: themed(tag_background);
+            }
+
+            .pull-date span {
+                color: themed(text);
+            }
+        }
+
+        .post-navigation a {
+            color: themed(text);
+        }
+
+        #kratos-widget-area {
+            .widget {
+                a,
+                &-title i {
+                    color: themed(text_alt);
+                }
+
+                &.widget-kratos {
+                    &-about .site-meta > .meta-item:hover {
+                        background-color: themed(info_background);
+                    }
+
+                    &-tags {
+                        .tag-clouds a {
+                            background-color: themed(tag_background);
+
+                            &:hover {
+                                color: themed(tag_background);
+                                background-color: themed(text_alt);
+                            }
+                        }
+                    }
+
+                    &-categories .category-list-item {
+                        &::before {
+                            color: themed(text_alt);
+                        }
+                        .category-list-count {
+                            color: themed(text);
+                            background-color: themed(info_background);
+                        }
+                    }
+                }
+            }
+        }
+
+        .pagination {
+            a,
+            span {
+                background-color: themed(tag_background);
+                color: themed(text);
+            }
+
+            > li > a {
+                background-color: themed(card_background);
+            }
+        }
+
+        .kratos-hentry,
+        .navigation div,
+        #kratos-widget-area .widget {
+            background-color: themed(card_background);
+        }
+
+        .arc-tags a {
+            color: themed(text_alt !important);
+            background-color: themed(tag_background !important);
+            border-color: themed(border !important);
+
+            &:hover {
+                color: themed(link_hover !important);
+            }
+        }
+
+        .linkpage ul li {
+            a h4 {
+                color: themed(text);
+            }
+
+            &:hover {
+                background-color: themed(info_background);
+            }
+        }
+
+        .kratos-post-header-title {
+            color: themed(text);
+        }
+
+        .xControl {
+            background-color: themed(info_background);
+
+            .xHeading span {
+                color: themed(text);
+            }
+        }
+
+        .index-post .kratos-entry-header .kratos-entry-title {
+            color: themed(text);
+
+            &::after {
+                background-color: themed(text);
+            }
+        }
+
+        #archives .posts-collapse .post-title a,
+        .categories > ul.category-list > li.category-list-item a {
+            color: themed(text_alt);
+        }
+
+        .post-comments {
+            background-color: themed(tag_background);
+        }
+
+        a:hover,
+        .kratos-entry-border-new a:hover,
+        .kratos-entry-header .kratos-post-meta a:hover,
+        .kratos-post-inner .kratos-copyright a:hover,
+        #footer li a:hover,
+        #archives .posts-collapse .post-title a:hover {
+            color: themed(link_hover);
+        }
+
+        #kratos-desktop-topnav {
+            background: themed(navbar_desktop);
+        }
+
+        #kratos-mobile-topnav {
+            background: themed(navbar_mobile);
+        }
+
+        .toc-item.active > a {
+            color: themed(tag_background);
+
+            &::before {
+                border-left-color: themed(tag_background);
+            }
+        }
+
+        span.blur {
+            text-shadow: 0 0 0.5em themed(text);
+
+            &:hover {
+                color: themed(text!important);
+            }
+        }
+
+        /******************* Plugins ********************/
+
+        #dsqjs {
+            a {
+                color: themed(link);
+            }
+
+            .dsqjs-tab-active {
+                color: themed(text);
+            }
+
+            &-msg {
+                color: themed(text);
+                background-color: themed(tag_background);
+            }
+        }
+
+        .post-comments {
+            .v[data-class="v"] {
+                p,
+                .vheader label,
+                .veditor,
+                .veditor::placeholder {
+                    color: themed(text);
+                }
+
+                .vbtn,
+                .vcount,
+                .vcard .vhead span.vnick,
+                .vcard .vhead .vtime {
+                    color: themed(text_alt);
+                }
+
+                .vicon,
+                .vcard .vhead .vreply svg {
+                    fill: themed(text_alt);
+                }
+
+                .vpanel {
+                    background-color: themed(tag_background);
+                }
+
+                .veditor:focus,
+                .vinput:focus {
+                    background-color: themed(info_background);
+                }
+            }
+        }
+
+        .aplayer * {
+            color: unset;
+        }
+
+        span.mjx-chtml.MJXc-display {
+            color: themed(text);
+        }
+
+        // 文章页面下方的tag样式出了点问题，修复一下
+        #aoeba-note-tag:hover {
+            color: themed(select_text);
+            background-color: themed(select_text_bg);
+        }
+
+        // 分类的悬停样式没了
+        .category-list-link:hover {
+            color: themed(link_hover) !important;
+        }
+
+        // fa图标主题切换也要变色  
+        .kratos-post-meta-new .svg-inline--fa {
+            color: themed(select_text_bg);
+        }
+    }
+}

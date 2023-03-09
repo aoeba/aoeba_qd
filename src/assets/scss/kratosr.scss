@@ -1843,7 +1843,7 @@ ul.kratos-post-meta {
   
     &:focus, &:hover {
       background: #8d8d8d;
-      color: #fff !important;
+      color: #fff;
     }
   }
 
@@ -2196,9 +2196,9 @@ ul.kratos-post-meta {
         li {
           margin-left: 10px;
       
-          &::before {
-            content: '\f114';
-          }
+          // &::before {
+          //   content: '\f114';
+          // }
         }
       
         .category-list-item .category-list-count {
@@ -3012,4 +3012,4 @@ body.custom-background {
   background-attachment: fixed;
 }
 
-@import './kr-color/default.scss';
+// @import './kr-color/default.scss';

@@ -11,6 +11,9 @@ const router = createRouter({
       children:[{
         path:'',
         component: ()=> import ('../views/Qt/Index/Index.vue')
+      },{
+        path:'/note/:id',
+        component: () => import('../views/Qt/Note')
       }]
     }
   ]

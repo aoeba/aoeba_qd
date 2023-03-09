@@ -4,13 +4,13 @@
       <h4 class="widget-title">
         <font-awesome-icon icon="fa-solid fa-folder"/> 分类目录
       </h4>
-      <ul class="category-list" v-for="category in site.categories">
-        <div class="category-list-item">
+      <ul class="category-list">
+        <li class="category-list-item" v-for="category in site.categories">
           <font-awesome-icon icon="fa-regular fa-folder" />
           <a class="category-list-link" :href="'/category/' + category.name">
             {{ category.name }}</a
           ><span class="category-list-count"> {{ category.size }}</span>
-        </div>
+        </li>
       </ul>
     </aside>
   </template>

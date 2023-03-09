@@ -1,0 +1,8 @@
+@import './dark/style.scss';
+@import './light/style.scss';
+
+$themes: (
+    dark: $theme-dark,
+    light: $theme-light,
+);
+

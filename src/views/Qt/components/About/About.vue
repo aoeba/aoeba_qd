@@ -1,6 +1,6 @@
 <template>
   <aside id="krw-about" class="widget widget-kratos-about clearfix">
-    <div class="photo-background"></div>
+    <div class="photo-background" :style="{'--aboutImage':setterStore.aboutImage}"></div>
     <div class="photo-wrapper clearfix">
         <div class="photo-wrapper-tip text-center">
             <img class="about-photo" :src="config.avatarUri" loading="lazy" decoding="auto" />
@@ -38,14 +38,14 @@
 </aside>
 </template>
 <script setup>
-import { setting } from '../../../../setting';
-const config = setting.cofing
+import { useSetterStore } from '../../../../stores/setter';
+const setterStore = useSetterStore()
+const config = setterStore.setting.config
 
 const site = {
   tags:[],
   categories:[],
   noteCount: 10,
-
 }
 </script>
 <style scoped lang="scss" src="./style.scss">

@@ -1,0 +1,29 @@
+$select_text: #fcfcfc;
+$select_text_bg: #262a30;
+$text: #000;
+$text_alt: #666;
+$link: #1e8cdb;
+$link_hover: #6ec3f5;
+$border: #3c495b3a;
+$tag_background: #fffd;
+$card_background: #ffffffcc;
+$page_background: #f5f5f5;
+$info_background: #efefefaa;
+$navbar_desktop: #282a2c99;
+$navbar_mobile: #16171ae6;
+
+$theme-light: (
+    select_text: $select_text,
+    select_text_bg: $select_text_bg,
+    text: $text,
+    text_alt: $text_alt,
+    link: $link,
+    link_hover: $link_hover,
+    border: $border,
+    tag_background: $tag_background,
+    card_background: $card_background,
+    page_background: $page_background,
+    info_background: $info_background,
+    navbar_desktop: $navbar_desktop,
+    navbar_mobile: $navbar_mobile,
+);
