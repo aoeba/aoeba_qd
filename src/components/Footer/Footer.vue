@@ -136,10 +136,8 @@ const changeModeLight = (modeLight) => {
   theme.modeLight = modeLight;
   if (modeLight) {
     mode = "light";
-    window.document.documentElement.setAttribute("data-theme", mode);
   } else {
     mode = "dark";
-    window.document.documentElement.setAttribute("data-theme", mode);
   }
   setterStore.changeThemeMode(mode);
 };

@@ -1,0 +1,24 @@
+.aoeba-ht {
+  display: flex;
+  flex-direction: row;
+  .aoeba-ht-left {
+    height: 100vh;
+    margin-right: 10px;
+  }
+  .aoeba-ht-right {
+    flex: 1;
+    height: 100vh;
+    margin-right: 10px;
+  }
+}
+
+.t-menu__logo {
+  a {
+    width: 100%;
+    display: flex;
+    img {
+      margin: auto;
+      transition: width .3s;
+    }
+  }
+}

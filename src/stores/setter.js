@@ -22,9 +22,18 @@ export const useSetterStore = defineStore('setting', () => {
             setting.theme.modeLight = false
             // 编辑器主题切换
             setting.theme.editorState.theme = 'dark'
+            // TDesign 模式切换
+            document.documentElement.setAttribute('theme-mode', themeMode)
+            // Kratos 模式切换
+            document.documentElement.setAttribute("data-theme", themeMode);
         } else {
             setting.theme.modeLight = true
+            //  编辑器主题切换
             setting.theme.editorState.theme = 'default'
+            // TDesign 模式切换
+            document.documentElement.removeAttribute('theme-mode')
+            // Kratos 模式切换
+            document.documentElement.setAttribute("data-theme", themeMode);
         }
         // 图片切换
         setting.config.bgImage = setting.theme.img.bgImage[themeMode]

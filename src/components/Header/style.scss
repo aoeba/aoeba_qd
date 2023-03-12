@@ -1,3 +1,7 @@
-.header-wraper{
-  box-sizing: border-box
+#kratos-menu-wrap {
+  display: flex;
+  width: 100%;
+  .aoeba-topnav-left {
+    flex: 1;
+  }
 }

@@ -15,6 +15,20 @@ const router = createRouter({
         path:'/note/:id',
         component: () => import('../views/Qt/Note')
       }]
+    },{
+      path:'/ht',
+      component: ()=> import('../views/Ht'),
+      children:[
+        {
+          path:'noteDetail',
+          component: ()=> import('@/views/Ht/NoteDetail')
+        },
+        {
+          path:'editNote',
+          component: ()=> import('@/views/Ht/EditNote'),
+          props: route => ({ id: route.query.id })
+        }
+      ]
     }
   ]
 })

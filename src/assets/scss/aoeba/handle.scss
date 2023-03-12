@@ -1,5 +1,7 @@
 @import "./theme.scss";
 
+$theme-map:null;
+
 @mixin themeify {
     @each $theme-name, $theme-map in $themes {
         $theme-map: $theme-map !global;

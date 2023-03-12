@@ -1,2 +1,2 @@
-import Ht from './Ht';
+import Ht from './Ht.vue';
 export default Ht;

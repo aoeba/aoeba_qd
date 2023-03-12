@@ -1,0 +1,33 @@
+
+.tag {
+  margin: 1px;
+}
+
+.t-card  {
+  margin-top: 10px;
+}
+
+.note-detail {
+  .select {
+    display: flex;
+    margin: 10px;
+    .sel-item {
+      margin: 5px;
+    }
+    .sel-btn {
+      flex :1;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: flex-end;
+      .btn {
+        margin: 5px;
+      }
+    }
+  }
+}
+
+.set-note-img {
+  justify-content: center;
+  display: flex;
+  margin-bottom: 20px;
+}

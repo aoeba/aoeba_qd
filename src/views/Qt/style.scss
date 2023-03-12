@@ -1,3 +1,10 @@
 .kratos-cover.kratos-cover-2 {
     background-image: var(--bannerImage);
 }
+
+@media (min-width: 768px) {
+    #kratos-page {
+        background-image: var(--bgImage); // 使用vue中的值
+        background-attachment: fixed; // 背景图片固定不滚动
+    }
+}

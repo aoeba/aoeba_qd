@@ -1,0 +1,43 @@
+.edit-note {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  .aoeba-note-info {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    .aoeba-note-info-1 {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .aoeba-note-title {
+        flex: 1;
+        margin: 2px 0;
+      }
+      button {
+        margin: 2px;
+      }
+    }
+
+    .aoeba-note-info-2 {
+      display: flex;
+      align-items: center;
+      .note-img {
+        width: 200px;
+        margin-right: 5px;
+      }
+      span {
+        margin: 0 0 0 5px;
+      }
+    }
+  }
+  #md-editor {
+    flex: 1;
+  }
+}
+.t-select__wrap {
+  width: auto;
+}
+
+.note-img-pre {
+  height: 30vh;
+}
