@@ -31,8 +31,8 @@
             <template #title>
               <span>系统设置</span>
             </template>
-            <t-menu-item value="swiperSet" :to="{ path: '/dashboard/swiperSet' }">
-              轮播框设置
+            <t-menu-item value="qdSetting" :to="{ path: '/ht/qdSetting' }">
+              主题设置
             </t-menu-item>
             <t-menu-item value="3-1-2"> 2级菜单内容 </t-menu-item>
           </t-submenu>

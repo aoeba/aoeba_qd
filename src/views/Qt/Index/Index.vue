@@ -13,13 +13,13 @@
         itemtype="https://schema.org/Article"
       >
         <div class="kratos-entry-border-new clearfix">
-          <div class="pin-top wrapper" v-if="note.top">
+          <div class="pin-top wrapper" v-if="note.mark == 1">
             <div class="pin-top inner"></div>
           </div>
 
           <div class="kratos-entry-thumb-new">
             <a @click="goto('/note/' + note.id)">
-              <img class="kratos-entry-thumb-new-img" :src="note.pic" alt="" />
+              <img class="kratos-entry-thumb-new-img" :src="note.img" alt="" />
             </a>
           </div>
           <div class="kratos-post-inner-new">
@@ -41,11 +41,11 @@
             <span class="pull-left">
               <time datetime="2018-06-30T07:27:05.000Z" itemprop="datePublished">
                 <font-awesome-icon icon="fa-regular fa-calendar-days" />
-                <a>{{ note.date }}</a>
+                <a>{{ strDateToYMD(note.createdAt) }}</a>
               </time>
-              <font-awesome-icon icon="fa-solid fa-tags" />
+              <font-awesome-icon icon="fa-solid fa-tags" v-if="note.tags.length > 0"/>
               <template v-for="(tag, i) in note.tags">
-                <a class="tag-none-link" rel="tag"> {{ tag }}</a>
+                <a class="tag-none-link" rel="tag"> {{ tag.name }}</a>
                 <template v-if="i < note.tags.length - 1">,</template>
               </template>
               <font-awesome-icon icon="fa-regular fa-eye" />
@@ -73,6 +73,15 @@
         </div>
       </article>
     </template>
+    <!-- 分页组件 -->
+    <t-pagination
+    :showPageSize="false"
+    :totalContent="false"
+    @change="pagination.onChange"
+    :total="pagination.total"
+    v-model="pagination.current"
+    :pageSize="pagination.pageSize"
+  />
   </div>
 
   <section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
@@ -89,30 +98,45 @@ import About from "../components/About";
 import Category from "../components/Category";
 import Tagcloud from "../components/Tagcloud";
 import router from "../../../router";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
+import { getNoteList } from "@/api/note";
+import { strDateToYMD } from "@/utils"
 
 const setterStore = useSetterStore()
 const setting = setterStore.setting
-const n = {
-  id: "wfsfcom",
-  title: "1qqqqqqq",
-  subtitle: "---f--f--f-f",
-  tags: ["aa", "dd", "cc"],
-  category: "aa",
-  content: "fasfaff",
-  readCount: 1,
-  commentCount: 2,
-  date: "2022-01-01",
-  top: true,
-  pic: "1",
-};
+
 const noteList = ref([]);
-for (var i = 0; i < 10; i++) {
-  noteList.value.push(n);
-}
 
 const goto = (path) => {
   router.push(path);
 };
+// 查询结果回调
+const pageChangeCallback = (data) => {
+  noteList.value.length = 0;
+  noteList.value.push(...data.content);
+  pagination.total = data.total;
+  pagination.current = data.number;
+  pagination.pageSize = data.size;
+};
+// 分页对象
+const pagination = reactive({
+  current: 1,
+  pageSize: 10,
+  total: 0,
+  showJumper: true,
+  onChange: (pageInfo) => {
+    getNoteList("", "", "", pageInfo.current, pageInfo.pageSize).then((res) => {
+      pageChangeCallback(res);
+      // 回到文章列表开始的位置
+      document.querySelector('#kratos-blog-post').scrollIntoView({behavior: "smooth"})
+    });
+  },
+});
+
+// 初始化时调用一次
+getNoteList().then((res) => {
+  pageChangeCallback(res);
+});
+
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

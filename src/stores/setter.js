@@ -1,21 +1,34 @@
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { setting as userSet } from '../setting'
+import { getQdSetting } from '@/api/setting'
 
 export const useSetterStore = defineStore('setting', () => {
     const setting = reactive(userSet)
 
+    const nowImg = reactive({})
+
     const bgImage = computed(() => {
-        return "url(" + setting.config.bgImage + ")";
+        return "url(" + nowImg.bgImage + ")";
     })
     const bannerImage = computed(() => {
-        return "url(" + setting.config.bannerImage + ")";
+        return "url(" + nowImg.bannerImage + ")";
     })
     const aboutImage = computed(() => {
-        return "url(" + setting.config.aboutImage + ")";
+        return "url(" + nowImg.aboutImage + ")";
     })
     const commentBgImage = computed(() => {
-        return "url(" + setting.config.commentBgImage + ")";
+        return "url(" + nowImg.commentBgImage + ")";
+    })
+    const themeMode = computed(()=> {
+        if (setting.theme.modeLight) {
+            return 'light'
+        } else {
+            return 'dark'
+        }
+    })
+    watch(themeMode,(newValue,oldValue) => {
+        changeThemeMode(newValue)
     })
     const changeThemeMode = (themeMode) => {
         if (themeMode === 'dark') {
@@ -36,11 +49,29 @@ export const useSetterStore = defineStore('setting', () => {
             document.documentElement.setAttribute("data-theme", themeMode);
         }
         // 图片切换
-        setting.config.bgImage = setting.theme.img.bgImage[themeMode]
-        setting.config.bannerImage = setting.theme.img.bannerImage[themeMode]
-        setting.config.aboutImage = setting.theme.img.aboutImage[themeMode]
-        setting.config.commentBgImage = setting.theme.img.commentBgImage[themeMode]
+        nowImg.bgImage = setting.theme.img.bgImage[themeMode]
+        nowImg.bannerImage = setting.theme.img.bannerImage[themeMode]
+        nowImg.aboutImage = setting.theme.img.aboutImage[themeMode]
+        nowImg.commentBgImage = setting.theme.img.commentBgImage[themeMode]
     }
 
-    return { setting, changeThemeMode, bgImage, bannerImage, aboutImage, commentBgImage }
+    // 重新加载qsSetting信息
+    const loadQdSettingInfo = () => {
+        getQdSetting().then( data => {
+            if (data && data != '') {
+                const settingData = JSON.parse(data)
+                setting.config = settingData.config
+                setting.path = settingData.path
+                setting.webLogo = settingData.webLogo
+                setting.theme = settingData.theme
+                // 加载完成后重置主题样式
+                changeThemeMode(setting.theme.modeLight ? 'light' : 'dark')
+            } else {
+                console.log("未配置QdSetting")
+            }
+        })
+    }
+
+
+    return { setting, changeThemeMode, bgImage, bannerImage, aboutImage, commentBgImage, loadQdSettingInfo }
 })

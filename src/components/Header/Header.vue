@@ -121,12 +121,15 @@
   </div>
 </template>
 <script setup>
-import { setting } from "../../setting";
 import router from "../../router";
 import { MessagePlugin } from "tdesign-vue-next";
 import { reactive, ref } from "vue";
 import { useUserStore } from "../../stores/user";
 import { login as apiLogin } from "../../api/user.js";
+import { useSetterStore} from '@/stores/setter'
+
+const setterStore = useSetterStore()
+const setting = setterStore.setting 
 
 const userStore = useUserStore();
 // 登录表单是否显示

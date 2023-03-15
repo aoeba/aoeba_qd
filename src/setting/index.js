@@ -1,3 +1,11 @@
+// 已加载的solid类型图标列表
+export const awesomeSolidIconList = [
+    "folder", "tags", "chevron-circle-right", "chevron-up", "adjust", "search", "house", "envelope"
+    , "pen-to-square", "triangle-exclamation", "right-to-bracket", "user", "right-from-bracket"
+    , "bars-progress"
+]
+
+// 作为store的数据模板,无法从服务端获取到配置信息时,以此为准
 export const setting = {
     path: '/',
     // 网站logo
@@ -34,10 +42,10 @@ export const setting = {
             weibo: 'weibo',
             mail: 'mail',
             github: 'https://github',
-            qq :'qq',
-            weixin : 'weixin',
-            git : 'git',
-            bilibili : 'bilibili'
+            qq: 'qq',
+            weixin: 'weixin',
+            git: 'git',
+            bilibili: 'bilibili'
         },
         search: {
             enable: true
@@ -76,25 +84,21 @@ export const setting = {
             // 代码主题 atom a11y github gradient kimbie paraiso qtcreator stackoverflow
             codeTheme: "atom",
         },
-        icp : '蜀ICP备16019003号-2',
-        hoster : {
-            url : 'https://curl.qcloud.com/rXfSaR1a',
-            img : '' ,
-            text : '腾讯云', 
+        icp: '蜀ICP备16019003号-2',
+        hoster: {
+            url: 'https://curl.qcloud.com/rXfSaR1a',
+            img: '',
+            text: '腾讯云',
         },
-        storage : {
-            url :'https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral' ,
-            img :''
+        storage: {
+            url: 'https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral',
+            img: ''
         }
     },
     config: {
         title: '网站标题',
         subtitle: '二级标题',
         avatarUri: 'https://candinya.com/images/candinya.webp',
-        description: '这里是描述',
-        bgImage: 'https://candinya.com/images/bg.webp', // 当前网站背景图片
-        bannerImage: 'https://candinya.com/images/banner.webp',
-        aboutImage: 'https://candinya.com/images/candinya.webp',
-        commentBgImage: '',
+        description: '这里是描述'
     }
 }

@@ -1,0 +1,50 @@
+.qd-setting {
+  height: 100vh;
+  position: relative;
+  overflow: auto;
+  padding: 10px 0;
+  .aoeba-card {
+    margin-right: 10px;
+    .set-item-title {
+      margin: 10px;
+      font-weight: bold;
+    }
+    .aoeba-set {
+      margin: 5px 0;
+      display: flex;
+      div{
+        display: flex;
+      }
+    }
+    .config,.topMenu,.contact {
+      flex-direction: column;
+      div {
+        flex: 1;
+      }
+    }
+    .index,.note,.editorState {
+      display: flex;
+      justify-content:left;
+      div {
+        margin-right: 5px;
+        div {
+          margin-left: 2px;
+        }
+      }
+    }
+    .bgImage,.bannerImage,.aboutImage,.commentBgImage,.hoster,.storage {
+      div {
+        flex: 1;
+      }
+    }
+
+    .set-ctrl {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      button {
+        margin: 0 10px;
+      }
+    }
+  }
+}
