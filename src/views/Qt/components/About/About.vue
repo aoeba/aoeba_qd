@@ -15,7 +15,7 @@
                 文章
             </span>
             <span class="count">
-                {{ site.noteCount }}
+                {{ props.noteCount }}
             </span>
         </a>
         <a class="meta-item">
@@ -23,7 +23,7 @@
                 分类
             </span>
             <span class="count">
-                {{ site.categories.length }}
+                {{ categoryStore.getCategories.length }}
             </span>
         </a>
         <a class="meta-item">
@@ -31,7 +31,7 @@
                 标签
             </span>
             <span class="count">
-                {{ site.tags.length }}
+                {{ tagStore.getTags.length }}
             </span>
         </a>
     </div>
@@ -39,14 +39,16 @@
 </template>
 <script setup>
 import { useSetterStore } from '../../../../stores/setter';
+import { useCategoryStore } from '@/stores/useCategory';
+import { useTagStore } from '@/stores/useTag';
+
 const setterStore = useSetterStore()
 const config = setterStore.setting.config
 
-const site = {
-  tags:[],
-  categories:[],
-  noteCount: 10,
-}
+const categoryStore = useCategoryStore()
+const tagStore = useTagStore()
+
+const props = defineProps(['noteCount'])
 </script>
 <style scoped lang="scss" src="./style.scss">
 

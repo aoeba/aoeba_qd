@@ -109,7 +109,11 @@
 import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useSetterStore } from "../../../stores/setter";
-import { ref } from "vue";
+import { ref, onMounted, reactive } from "vue";
+import { useRoute } from 'vue-router'
+import { getNote } from "@/api/note";
+import { strDateToYMD, completeDate } from "@/utils";
+import { updateVisitorCounter } from "@/api/leancloud";
 
 // 编辑器需要的相关库
 // <=5.2.0
@@ -154,16 +158,46 @@ const setting = setterStore.setting;
 const theme = setting.theme;
 const scrollElement = document.documentElement;
 
-const note = {
-  title: "测试标题",
-  subtitle: "二级标题",
-  date: "2023-01-01",
-  expire: true,
-  updated: "2023-03-07",
-  content: "## fafaf文本内容试",
-  tags: ["tag1", "tag2", "tag3"],
-};
+const note = reactive({
+  title: "",
+  subtitle: "",
+  date: "",
+  expire: false,
+  updated: "",
+  content: "",
+  tags: [],
+});
 
 const text = ref(note.content);
+const route = useRoute()
+onMounted(() => {
+  const id = route.params.id;
+  getNote(id).then((res) => {
+    note.title = res.title;
+    note.date = strDateToYMD(res.createdAt);
+    let updatedAt = res.createdAt;
+    if (res.updatedAt) {
+      note.updated = strDateToYMD(res.updatedAt);
+      updatedAt = res.updatedAt;
+    } else {
+      note.updated = strDateToYMD(res.createdAt);
+    }
+    text.value = note.content = res.content;
+    note.tags.length = 0;
+    res.tags?.forEach((tag) => {
+      // {name:'',size:''}
+      note.tags.push(tag.name);
+    });
+    // 判断是否过期
+    if (!completeDate(new Date(updatedAt), new Date(), 3)) {
+      note.expire = true;
+    } else {
+      note.expire = false;
+    }
+    // 统计点击量
+    const url = window.location.protocol + "//" + window.location.host + "/note/" + id;
+    updateVisitorCounter(url, note.title);
+  });
+});
 </script>
 <style scoped lang="scss" src="./style.scss"></style>
