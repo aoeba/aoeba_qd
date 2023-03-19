@@ -5,3 +5,13 @@ svg {
 .t-pagination {
   justify-content: center;
 }
+
+.note-filter-tag {
+  margin-right: 5px;
+}
+
+#note-filter {
+  .text {
+    color: var(--td-text-color-primary);
+  }
+}

@@ -6,6 +6,53 @@
         : 'col-md-12'
     "
   >
+    <!-- 页内导航组件 -->
+    <template v-if="noteFilter.category || noteFilter.tag.length > 0">
+      <article class="kratos-hentry kratos-entry-border-new clearfix">
+        <div id="note-filter" class="kratos-breadcrumb">
+          <span class="text">搜索:</span>
+          <t-tag
+            key="category"
+            :closable="true"
+            @close="noteFilter.category = ''"
+            size="large"
+            variant="light"
+            maxWidth="200"
+            v-if="noteFilter.category"
+            class="note-filter-tag"
+          >
+            <template #icon>
+              <font-awesome-icon icon="fa-regular fa-folder" />
+            </template>
+            {{ noteFilter.category }}
+          </t-tag>
+          <t-tag
+            v-for="(tag, index) in noteFilter.tag"
+            :key="index + tag"
+            :closable="true"
+            @close="noteFilter.tag.splice(noteFilter.tag.indexOf(tag), 1)"
+            size="large"
+            variant="light"
+            maxWidth="200"
+            class="note-filter-tag"
+          >
+            <template #icon>
+              <font-awesome-icon icon="fa-solid fa-tag" />
+            </template>
+            {{ tag }}
+          </t-tag>
+          <a title="清空" @click="
+              () => {
+                noteFilter.category = '';
+                noteFilter.tag.length = 0;
+              }
+            ">
+            <!-- <font-awesome-icon icon="fa-solid fa-broom" /> -->
+            <t-icon name="clear" size="30px"/>
+          </a>
+        </div>
+      </article>
+    </template>
     <template v-for="note in noteList">
       <article
         class="kratos-hentry clearfix"
@@ -81,14 +128,17 @@
       :total="pagination.total"
       v-model="pagination.current"
       :pageSize="pagination.pageSize"
+      v-if="noteList.length > 0"
     />
+    <!-- 全屏加载，过滤查询时显示 -->
+    <t-loading :loading="loading" text="加载中..." fullscreen />
   </div>
 
   <section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
     <div class="sticky-area">
-      <About :noteCount="pagination.total"/>
-      <Category />
-      <Tagcloud />
+      <About :noteCount="noteCount" />
+      <Category @click-category="(value) => (noteFilter.category = value)" />
+      <Tagcloud @click-tag="clickTag" />
     </div>
   </section>
 </template>
@@ -98,17 +148,19 @@ import About from "../components/About";
 import Category from "../components/Category";
 import Tagcloud from "../components/Tagcloud";
 import router from "../../../router";
-import { ref, reactive } from "vue";
-import { getNoteList } from "@/api/note";
+import { ref, reactive, watch } from "vue";
+import { getNoteList, tagArrayTostr } from "@/api/note";
 import { strDateToYMD } from "@/utils";
 import { getCommentsV3 } from "@/api/github";
-import { getReadCount } from "@/api/leancloud";
+import { getReadCountByUrls } from "@/api/leancloud";
+import { MessagePlugin } from "tdesign-vue-next";
 
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
 
 const noteList = ref([]);
 
+const urlPre = window.location.protocol + "//" + window.location.host;
 const goto = (path) => {
   router.push(path);
 };
@@ -120,6 +172,7 @@ const pageChangeCallback = (data) => {
   pagination.current = data.number;
   pagination.pageSize = data.size;
   // 获取评论数及阅读数
+  const urls = [];
   noteList.value.forEach((value) => {
     const id = "/note/" + value.id;
     getCommentsV3(id)
@@ -129,15 +182,19 @@ const pageChangeCallback = (data) => {
       .catch((err) => {
         value.commentCount = 0;
       });
-    const url =
-      window.location.protocol + "//" + window.location.host + "/note/" + value.id;
-    getReadCount(url)
-      .then((count) => {
-        value.readCount = count;
-      })
-      .catch((err) => {
-        value.readCount = 0;
-      });
+    value.readCount = 0;
+    const url = urlPre + "/note/" + value.id;
+    urls.push(url);
+  });
+  getReadCountByUrls(urls).then((res) => {
+    const countMap = new Map();
+    res.forEach((counter) => {
+      countMap.set(counter.get("pageUrl"), counter.get("PV"));
+    });
+    noteList.value.forEach((value) => {
+      const count = countMap.get(urlPre + "/note/" + value.id);
+      value.readCount = count ? count : 0;
+    });
   });
 };
 // 分页对象
@@ -147,7 +204,13 @@ const pagination = reactive({
   total: 0,
   showJumper: true,
   onChange: (pageInfo) => {
-    getNoteList("", "", "", pageInfo.current, pageInfo.pageSize).then((res) => {
+    getNoteList(
+      tagArrayTostr(noteFilter.tag),
+      "",
+      noteFilter.category,
+      pageInfo.current,
+      pageInfo.pageSize
+    ).then((res) => {
       pageChangeCallback(res);
       // 回到文章列表开始的位置
       document.querySelector("#kratos-blog-post").scrollIntoView({ behavior: "smooth" });
@@ -155,9 +218,40 @@ const pagination = reactive({
   },
 });
 
+// 文章总数
+const noteCount = ref(0);
 // 初始化时调用一次
 getNoteList().then((res) => {
   pageChangeCallback(res);
+  // 文章总数
+  noteCount.value = res.total;
+  // noteFilter.tag = ''
+  // note.category = ''
 });
+// 文章查询条件
+const noteFilter = reactive({
+  tag: [],
+  category: "",
+});
+// 全屏加载
+const loading = ref(false);
+watch(noteFilter, (newValue, oldValue) => {
+  loading.value = true;
+  getNoteList(tagArrayTostr(noteFilter.tag), "", noteFilter.category)
+    .then((res) => {
+      pageChangeCallback(res);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
+});
+// 点击tag时触发
+const clickTag = (value) => {
+  if (noteFilter.tag.includes(value)) {
+    MessagePlugin.warning("该标签已经选择过了:" + value);
+  } else {
+    noteFilter.tag.push(value);
+  }
+};
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

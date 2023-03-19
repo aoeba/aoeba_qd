@@ -75,3 +75,19 @@ export function getReadCount(url) {
         })
     })
 }
+
+/**
+ * 根据url批量查询页面点击量
+ * @param {String} urls 页面的唯一标识组成的数组
+ */
+ export function getReadCountByUrls(urls) {
+    return new Promise((resolve, reject) => {
+        const query = new AV.Query("VisitorCounter")
+        query.containedIn("pageUrl", urls)
+        query.find().then(res => {
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}

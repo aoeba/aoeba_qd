@@ -16,13 +16,13 @@ library.add(faGithub, faQq, faWeixin, faWeibo, faGit, faBilibili)
 import {
     faTags, faFolder as sFolder, faChevronCircleRight,
     faChevronUp, faAdjust, faSearch, faHouse, faEnvelope, faPenToSquare, faTriangleExclamation,
-    faRightToBracket,faUser,faRightFromBracket,faBarsProgress,faGears
+    faRightToBracket,faUser,faRightFromBracket,faBarsProgress,faGears,faTag
 }
     from '@fortawesome/free-solid-svg-icons'
 /* add icons to the library */
 library.add(sFolder, faTags, faChevronCircleRight, faChevronUp, faAdjust, faSearch, faHouse, faEnvelope
     , faPenToSquare, faTriangleExclamation, faRightToBracket,faUser,faRightFromBracket,faBarsProgress
-    ,faGears)
+    ,faGears,faTag)
 
 import './assets/scss/kratosr.scss'
 import './assets/scss/aoeba/handle.scss'
