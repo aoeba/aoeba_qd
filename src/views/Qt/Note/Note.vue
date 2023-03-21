@@ -83,6 +83,10 @@
         </footer>
       </div>
     </article>
+    <!-- 评论 -->
+    <div class="kratos-hentry kratos-post-inner clearfix gitalk-container">
+      <div id="gitalk-container"></div>
+    </div>
   </div>
   <section id="kratos-widget-area" class="col-md-4 hidden-xs hidden-sm">
     <div class="sticky-area">
@@ -110,10 +114,13 @@ import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useSetterStore } from "../../../stores/setter";
 import { ref, onMounted, reactive } from "vue";
-import { useRoute } from 'vue-router'
+import { useRoute } from "vue-router";
 import { getNote } from "@/api/note";
 import { strDateToYMD, completeDate } from "@/utils";
 import { updateVisitorCounter } from "@/api/leancloud";
+import "gitalk/dist/gitalk.css";
+import Gitalk from "gitalk";
+import { config as githubConfig } from '@/api/github'
 
 // 编辑器需要的相关库
 // <=5.2.0
@@ -169,9 +176,10 @@ const note = reactive({
 });
 
 const text = ref(note.content);
-const route = useRoute()
+const route = useRoute();
 onMounted(() => {
   const id = route.params.id;
+  // 获取文章
   getNote(id).then((res) => {
     note.title = res.title;
     note.date = strDateToYMD(res.createdAt);
@@ -197,6 +205,22 @@ onMounted(() => {
     // 统计点击量
     const url = window.location.protocol + "//" + window.location.host + "/note/" + id;
     updateVisitorCounter(url, note.title);
+    // 加载评论组件
+    const commentConfig = {
+      clientID: githubConfig.clientID,
+      clientSecret: githubConfig.clientSecret,
+      repo: "comments",
+      owner: githubConfig.owner,
+      // 这里接受一个数组，可以添加多个管理员，可以是你自己
+      admin: [githubConfig.owner],
+      // id 用于当前页面的唯一标识，一般来讲 pathname 足够了，
+      // 但是如果你的 pathname 超过 50 个字符，GitHub 将不会成功创建 issue，此情况可以考虑给每个页面生成 hash 值的方法.
+      id: "/note/" + id,
+      title: note.title,
+      distractionFreeMode: false,
+    };
+    const gitalk = new Gitalk(commentConfig);
+    gitalk.render("gitalk-container");
   });
 });
 </script>

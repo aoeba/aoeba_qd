@@ -66,3 +66,41 @@ export function completeDate(time1, time2, m) {
     }
     return true
 }
+
+/**
+ * 把字节转换成正常文件大小
+ * @param {*} size 
+ * @returns 
+ */
+export function getFileSize(size) {
+    if (!size) return "";
+    var num = 1024.00; //byte
+    if (size < num)
+        return size + "B";
+    if (size < Math.pow(num, 2))
+        return (size / num).toFixed(2) + "KB"; //kb
+    if (size < Math.pow(num, 3))
+        return (size / Math.pow(num, 2)).toFixed(2) + "MB"; //M
+    if (size < Math.pow(num, 4))
+        return (size / Math.pow(num, 3)).toFixed(2) + "G"; //G
+    return (size / Math.pow(num, 4)).toFixed(2) + "T"; //T
+}
+
+/**
+ * 时间戳转日期 1:Y-M-D  else: Y-M-D H:Min:S
+ * @param {*} timer 
+ * @returns 
+ */
+export function timestampToTime(timer, type) {
+    let curDate = new Date(timer * 1000);
+    let Y = curDate.getFullYear();
+    let M = curDate.getMonth() + 1 < 10 ? `0${curDate.getMonth() + 1}` : `${curDate.getMonth() + 1}`;
+    let D = curDate.getDate() < 10 ? `0${curDate.getDate()}` : `${curDate.getDate()}`;
+    let H = curDate.getHours() < 10 ? `0${curDate.getHours()}` : `${curDate.getHours()}`;
+    let Min = curDate.getMinutes() < 10 ? `0${curDate.getMinutes()}` : `${curDate.getMinutes()}`;
+    let S = curDate.getSeconds() < 10 ? `0${curDate.getSeconds()}` : `${curDate.getSeconds()}`;
+    if (type === 1) {
+        return `${Y}-${M}-${D}`
+    }
+    return `${Y}-${M}-${D} ${H}:${Min}:${S}`
+}

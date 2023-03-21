@@ -8,6 +8,9 @@
 }
 
 .note-detail {
+  height: 100vh;
+  overflow: auto;
+  padding-right: 10px;
   .select {
     display: flex;
     margin: 10px;

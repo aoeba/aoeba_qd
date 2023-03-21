@@ -1,0 +1,27 @@
+.file {
+  height: 100vh;
+  overflow: auto;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  .file-card {
+    margin-right: 10px;
+    flex: 1;
+  }
+
+  #upload .t-upload__dragger {
+    width: auto;
+    height: auto;
+    padding: 0;
+    cursor: default;
+    .t-table__content {
+      margin: 0 5px;
+      .t-table--layout-fixed {
+        margin: 10px 0px;
+      }
+    }
+    #m-fileOperation {
+      display: flex;
+    }
+  }
+}

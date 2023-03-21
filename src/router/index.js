@@ -31,6 +31,10 @@ const router = createRouter({
         {
           path: 'qdSetting',
           component: () => import('@/views/Ht/QdSetting')
+        },
+        {
+          path : 'fileManagement',
+          component: () => import ('@/views/Ht/FileManagement')
         }
       ]
     }

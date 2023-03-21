@@ -1,7 +1,7 @@
 // github相关的查询
 import axios from "axios";
 
-const config = {
+export const config = {
     clientID: "c788d2e29e093f561bbf",
     clientSecret: "7d6ce6ca2de7654f3b2548af8689de8d2c154b3e",
     repo: "comments",

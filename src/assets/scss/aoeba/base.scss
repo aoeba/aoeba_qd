@@ -347,9 +347,40 @@ body {
             color: themed(link_hover) !important;
         }
 
-        // fa图标主题切换也要变色  
+        // fa图标主题切换也要变色
         .kratos-post-meta-new .svg-inline--fa {
             color: themed(select_text_bg);
+        }
+
+        // for Gitalk
+        .gt-counts {
+            color: themed(text);
+        }
+
+        .gt-header-textarea {
+            background-color: themed(page_background) !important;
+            color: themed(text) !important;
+        }
+
+        .gt-user-name {
+            color: themed(text);
+        }
+
+        .gt-header-preview {
+            background-color: themed(page_background) !important;
+        }
+
+        .gt-btn-preview {
+            background-color: themed(page_background) !important;
+        }
+
+        .gt-comment-content {
+            background-color: themed(page_background) !important;
+        }
+
+        .gt-popup {
+            background-color: themed(page_background) !important;
+            border-color: #6190e8 !important;
         }
     }
 }

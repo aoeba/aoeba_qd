@@ -455,7 +455,7 @@ const save = () => {
 }
 onMounted(() => {
   // 加载最新的配置信息
-  setterStore.loadQdSettingInfo();
+  // setterStore.loadQdSettingInfo();
 });
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

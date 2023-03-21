@@ -24,6 +24,12 @@
             </template>
             写笔记
           </t-menu-item>
+          <t-menu-item value="fileManagement" :to="{ path: '/ht/fileManagement' }">
+            <template #icon>
+              <t-icon name="file" />
+            </template>
+            文件管理
+          </t-menu-item>
           <t-submenu value="setting">
             <template #icon>
               <t-icon name="setting" />
@@ -60,7 +66,7 @@ const collapsed = ref(false);
 const changeCollapsed = () => {
   collapsed.value = !collapsed.value;
 };
-const menuValue = ref("noteDetail")
+const menuValue = ref("")
 // 子页面之间直接跳转时通知父页面改当前菜单
 const changeMenuValue = (value) => {
   menuValue.value = value

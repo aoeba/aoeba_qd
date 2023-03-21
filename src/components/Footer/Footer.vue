@@ -96,7 +96,7 @@
       <div class="kr-tool text-center">
         <div class="tool">
           <div class="box search-box" v-if="theme.search.enable">
-            <a href="<%- config.root %>search/">
+            <a @click="MessagePlugin.warning('暂未实现')">
               <span><font-awesome-icon icon="fa-solid fa-search" /></span>
             </a>
           </div>
@@ -123,6 +123,7 @@ import { useSetterStore } from "../../stores/setter";
 import psr_img from "../../assets/images/psr.webp";
 import txy_wy from "../../assets/images/txy_wy.svg";
 import upyun_logo from '../../assets/images/upyun_logo.png';
+import { MessagePlugin } from "tdesign-vue-next";
 
 const setterStore = useSetterStore();
 const theme = setterStore.setting.theme;

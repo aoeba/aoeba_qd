@@ -96,8 +96,8 @@ export const setting = {
         }
     },
     config: {
-        title: '网站标题',
-        subtitle: '二级标题',
+        title: '玛卡玛卡',
+        subtitle: '好像没获取到网页配置信息...',
         avatarUri: 'https://candinya.com/images/candinya.webp',
         description: '这里是描述'
     }
