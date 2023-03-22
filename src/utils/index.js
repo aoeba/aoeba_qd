@@ -4,12 +4,21 @@ const req = axios.create()
 /**
  * 将字符串格式日期转换为Y-M-D格式
  * @param {String} strDate 
+ * @param {Nubmer} type 1:Y-M-D  else: Y-M-D H:Min:S
  * @returns 
  */
-export function strDateToYMD(strDate) {
-    let d = new Date(strDate)
-    let s = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate()
-    return s
+export function strDateToYMD(strDate,type = 1) {
+    let curDate = new Date(strDate)
+    let Y = curDate.getFullYear();
+    let M = curDate.getMonth() + 1 < 10 ? `0${curDate.getMonth() + 1}` : `${curDate.getMonth() + 1}`;
+    let D = curDate.getDate() < 10 ? `0${curDate.getDate()}` : `${curDate.getDate()}`;
+    let H = curDate.getHours() < 10 ? `0${curDate.getHours()}` : `${curDate.getHours()}`;
+    let Min = curDate.getMinutes() < 10 ? `0${curDate.getMinutes()}` : `${curDate.getMinutes()}`;
+    let S = curDate.getSeconds() < 10 ? `0${curDate.getSeconds()}` : `${curDate.getSeconds()}`;
+    if (type === 1) {
+        return `${Y}-${M}-${D}`
+    }
+    return `${Y}-${M}-${D} ${H}:${Min}:${S}`
 }
 
 /**
