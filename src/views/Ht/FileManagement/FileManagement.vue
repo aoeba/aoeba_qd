@@ -344,6 +344,51 @@ export default {
         this.refreshFolder(this.breadcrumbPath);
       });
     },
+    ctrlV(event) {
+      var items = event.clipboardData && event.clipboardData.items;
+      var file = null;
+      if (items && items.length) {
+        // 检索剪切板items
+        for (var i = 0; i < items.length; i++) {
+          if (items[i].type.indexOf("image") !== -1) {
+            file = items[i].getAsFile();
+            break;
+          }
+        }
+      }
+      // 此时file就是剪切板中的图片文件
+      if (file != null) {
+        // 此时可以自行将文件上传至服务器
+        // 调整文件名
+        let fileName = file.name; // 保存文件名
+        let fileName2 = fileName.split("."); // 对文件名进行切割
+        let curDate = new Date();
+        let Y = curDate.getFullYear();
+        let M =
+          curDate.getMonth() + 1 < 10
+            ? `0${curDate.getMonth() + 1}`
+            : `${curDate.getMonth() + 1}`;
+        let D = curDate.getDate() < 10 ? `0${curDate.getDate()}` : `${curDate.getDate()}`;
+        let H =
+          curDate.getHours() < 10 ? `0${curDate.getHours()}` : `${curDate.getHours()}`;
+        let Min =
+          curDate.getMinutes() < 10
+            ? `0${curDate.getMinutes()}`
+            : `${curDate.getMinutes()}`;
+        let S =
+          curDate.getSeconds() < 10
+            ? `0${curDate.getSeconds()}`
+            : `${curDate.getSeconds()}`;
+        let newName = Y + M + D + H + Min + S + fileName2[0];
+        //var renameFile =new File([原文件], 新文件名,文件类型);
+        var renameFile = new File([file], newName, {
+          type: file.type,
+        });
+        this.uploadFile({ raw: renameFile });
+      } else {
+        MessagePlugin.warning("在剪切板中未找到图片");
+      }
+    },
   },
   created() {
     this.refreshFolder(this.breadcrumbPath);
@@ -363,42 +408,10 @@ export default {
   mounted() {
     const that = this;
     // ctrl+v 粘贴上传图片
-    document.addEventListener("paste", function (event) {
-      var items = event.clipboardData && event.clipboardData.items;
-      var file = null;
-      if (items && items.length) {
-        // 检索剪切板items
-        for (var i = 0; i < items.length; i++) {
-          if (items[i].type.indexOf("image") !== -1) {
-            file = items[i].getAsFile();
-            break;
-          }
-        }
-      }
-      // 此时file就是剪切板中的图片文件
-      if (file != null) {
-        // 此时可以自行将文件上传至服务器
-        // 调整文件名
-        let time = new Date();
-        let fileName = file.name; // 保存文件名
-        let fileName2 = fileName.split("."); // 对文件名进行切割
-        let newName =
-          time.getHours() +
-          "_" +
-          time.getMinutes() +
-          "_" +
-          time.getSeconds() +
-          "_" +
-          fileName2[0];
-        //var renameFile =new File([原文件], 新文件名,文件类型);
-        var renameFile = new File([file], newName, {
-          type: file.type,
-        });
-        that.uploadFile({ raw: renameFile });
-      } else {
-        MessagePlugin.warning("在剪切板中未找到图片");
-      }
-    });
+    document.addEventListener("paste", this.ctrlV);
+  },
+  unmounted() {
+    document.removeEventListener("paste", this.ctrlV);
   },
   setup(props) {
     const breadcrumb = ref([]);
@@ -420,6 +433,7 @@ export default {
       sortBy: "type",
       descending: false,
     });
+
     breadcrumb.value.push({ name: "根目录", url: "" });
     return {
       breadcrumb,

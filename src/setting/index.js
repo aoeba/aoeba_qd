@@ -39,13 +39,13 @@ export const setting = {
         },
         contact: {
             // github, qq, weixin, weibo, git, bilibili , mail
-            weibo: 'weibo',
-            mail: 'mail',
-            github: 'https://github',
-            qq: 'qq',
-            weixin: 'weixin',
-            git: 'git',
-            bilibili: 'bilibili'
+            weibo: '',
+            mail: '',
+            github: '',
+            qq: '',
+            weixin: '',
+            git: '',
+            bilibili: ''
         },
         search: {
             enable: true

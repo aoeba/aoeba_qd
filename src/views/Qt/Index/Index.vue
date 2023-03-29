@@ -81,7 +81,7 @@
               </h2>
             </header>
             <div class="kratos-entry-content-new">
-              <p itemprop="description">{{ note.content }}</p>
+              <p itemprop="description">{{ splitString(note.content,130) }}</p>
             </div>
           </div>
           <footer class="kratos-post-meta-new">
@@ -150,11 +150,10 @@ import Tagcloud from "../components/Tagcloud";
 import router from "../../../router";
 import { ref, reactive, watch } from "vue";
 import { getNoteList, tagArrayTostr } from "@/api/note";
-import { strDateToYMD } from "@/utils";
+import { strDateToYMD,splitString } from "@/utils";
 import { getCommentsV3 } from "@/api/github";
 import { getReadCountByUrls } from "@/api/leancloud";
 import { MessagePlugin } from "tdesign-vue-next";
-
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
 

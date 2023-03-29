@@ -99,6 +99,7 @@
       :theme="theme.editorState.theme"
       :preview-theme="theme.editorState.preTheme"
       :code-theme="theme.editorState.codeTheme"
+      @onUploadImg="onUploadImg"
     />
   </div>
 </template>
@@ -110,6 +111,7 @@ import { ref, nextTick, onMounted } from "vue";
 import { useCategoryStore } from "@/stores/useCategory";
 import { MessagePlugin } from "tdesign-vue-next";
 import { tagArrayTostr, saveNote, updateNote, getNote } from "@/api/note";
+import { uploadFile } from "@/api/file";
 
 // 编辑器需要的相关库
 // <=5.2.0
@@ -247,10 +249,10 @@ const save = (type) => {
   }
 };
 
-const emit = defineEmits(['changeMenu'])
+const emit = defineEmits(["changeMenu"]);
 // 初始化含id时加载文章内容
 onMounted(() => {
-  emit('changeMenu','editNote')
+  emit("changeMenu", "editNote");
   if (props.id) {
     getNote(props.id).then((data) => {
       title.value = data.title;
@@ -262,5 +264,23 @@ onMounted(() => {
     });
   }
 });
+
+// 上传图片
+const onUploadImg = async (files, callback) => {
+  const res = await Promise.all(
+    files.map((file) => {
+      return new Promise((rev, rej) => {
+        let format = new window.FormData();
+        format.append("file", file);
+        format.append("path", "");
+        uploadFile(format)
+          .then((res) => rev(res))
+          .catch((error) => rej(error));
+      });
+    })
+  );
+
+  callback(res);
+};
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

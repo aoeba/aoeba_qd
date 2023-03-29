@@ -25,17 +25,13 @@ export function updateVisitorCounter(url, title) {
             const todo = AV.Object.createWithoutData("VisitorCounter", counter.id);
             const pv = counter.get("PV") + 1
             todo.set("PV", pv);
-            todo.save().then(res=> {
-                saveVisitorRecord(title,url)
-            })
+            todo.save()
         } else {
             const counter = new VisitorCounter()
             counter.set("pageUrl", url)
             counter.set("pageTitle", title)
             counter.set("PV", 1)
-            counter.save().then(res=> {
-                saveVisitorRecord(title,url)
-            })
+            counter.save()
         }
     })
 }

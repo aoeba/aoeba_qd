@@ -113,3 +113,17 @@ export function timestampToTime(timer, type) {
     }
     return `${Y}-${M}-${D} ${H}:${Min}:${S}`
 }
+
+/**
+ * 限制字符串长度,超出时省略
+ * @param {String} s 待分割字符串
+ * @param {Number} len 限定长度
+ * @returns 
+ */
+export function splitString(s,len = 300) {
+    if (s.length > len) {
+        return s.substring(0,len) + "..."
+    } else {
+        return s
+    }
+}

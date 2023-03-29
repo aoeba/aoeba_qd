@@ -7,37 +7,47 @@
             <ul class="kratos-social-icons">
               <!-- Keep for compatibility 
                weibo, mail, github, qq, weixin, git, bilibili -->
-              <li v-if="theme.contact.weibo">
+              <li v-if="theme.contact.weibo" key="weibo">
                 <a target="_blank" rel="nofollow" :href="theme.contact.weibo"
                   ><font-awesome-icon icon="fa-brands fa-weibo"
                 /></a>
               </li>
-              <li v-if="theme.contact.mail">
+              <li v-if="theme.contact.mail" key="mail">
                 <a :href="'mailto:' + theme.contact.mail"
                   ><font-awesome-icon icon="fa-solid fa-envelope"
                 /></a>
               </li>
-              <li v-if="theme.contact.github">
+              <li v-if="theme.contact.github" key="github">
                 <a target="_blank" rel="nofollow" :href="theme.contact.github">
                   <font-awesome-icon icon="fa-brands fa-github" />
                 </a>
               </li>
-              <li v-if="theme.contact.qq">
-                <a target="_blank" rel="nofollow" :href="theme.contact.qq">
-                  <font-awesome-icon icon="fa-brands fa-qq" />
-                </a>
+              <li v-if="theme.contact.qq" key="qq">
+                <t-popup placement="top">
+                  <a target="_blank" rel="nofollow" :href="theme.contact.qq">
+                    <font-awesome-icon icon="fa-brands fa-qq" />
+                  </a>
+                  <template #content>
+                    <img :src="theme.contact.qq" class="note-img-pre" />
+                  </template>
+                </t-popup>
               </li>
-              <li v-if="theme.contact.weixin">
-                <a target="_blank" rel="nofollow" :href="theme.contact.weixin">
-                  <font-awesome-icon icon="fa-brands fa-weixin" />
-                </a>
+              <li v-if="theme.contact.weixin" key="weixin">
+                <t-popup placement="top">
+                  <a target="_blank" rel="nofollow" :href="theme.contact.weixin">
+                    <font-awesome-icon icon="fa-brands fa-weixin" />
+                  </a>
+                  <template #content>
+                    <img :src="theme.contact.weixin" class="note-img-pre" />
+                  </template>
+                </t-popup>
               </li>
-              <li v-if="theme.contact.git">
+              <li v-if="theme.contact.git" key="git">
                 <a target="_blank" rel="nofollow" :href="theme.contact.git">
                   <font-awesome-icon icon="fa-brands fa-git" />
                 </a>
               </li>
-              <li v-if="theme.contact.bilibili">
+              <li v-if="theme.contact.bilibili" key="bilibili">
                 <a target="_blank" rel="nofollow" :href="theme.contact.bilibili">
                   <font-awesome-icon icon="fa-brands fa-bilibili" />
                 </a>
@@ -45,7 +55,9 @@
             </ul>
             <ul class="kratos-copyright">
               <div>
-                <li>&copy; {{ year }} {{setterStore.setting.config.title}} 版权所有.</li>
+                <li>
+                  &copy; {{ year }} {{ setterStore.setting.config.title }} 版权所有.
+                </li>
               </div>
               <div>
                 <li v-if="theme.storage?.url">
@@ -79,12 +91,7 @@
                     href="https://beian.miit.gov.cn"
                     rel="external nofollow"
                     target="_blank"
-                    ><img
-                      :src="psr_img"
-                      height="14"
-                      loading="lazy"
-                      decoding="auto"
-                    />
+                    ><img :src="psr_img" height="14" loading="lazy" decoding="auto" />
                     {{ theme.icp }}
                   </a>
                 </li>
@@ -122,7 +129,7 @@
 import { useSetterStore } from "../../stores/setter";
 import psr_img from "../../assets/images/psr.webp";
 import txy_wy from "../../assets/images/txy_wy.svg";
-import upyun_logo from '../../assets/images/upyun_logo.png';
+import upyun_logo from "../../assets/images/upyun_logo.png";
 import { MessagePlugin } from "tdesign-vue-next";
 
 const setterStore = useSetterStore();
@@ -145,6 +152,6 @@ const changeModeLight = (modeLight) => {
 
 changeModeLight(theme.modeLight);
 
-const year = new Date().getFullYear()
+const year = new Date().getFullYear();
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

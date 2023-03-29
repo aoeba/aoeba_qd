@@ -23,7 +23,7 @@
 
             <li v-if="theme.note.wordCount?.enable">
               <font-awesome-icon icon="fa-solid fa-pen-to-square" />
-              999字
+              {{ note.content.length }}字
             </li>
           </ul>
         </header>
