@@ -1,9 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+// import { createRouter, createWebHistory } from 'vue-router'
 
 import Qt from '../views/Qt'
 
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+const router = {
   routes: [
     {
       path: '/',
@@ -39,6 +38,6 @@ const router = createRouter({
       ]
     }
   ]
-})
+}
 
 export default router

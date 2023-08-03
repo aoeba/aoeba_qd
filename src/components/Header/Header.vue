@@ -123,15 +123,18 @@
 <script setup>
 import router from "../../router";
 import { MessagePlugin } from "tdesign-vue-next";
-import { reactive, ref } from "vue";
+import { reactive, ref, toRaw } from "vue";
 import { useUserStore } from "../../stores/user";
 import { login as apiLogin } from "../../api/user.js";
-import { useSetterStore} from '@/stores/setter'
+import { useSetterStore} from '@/stores/setter';
+import { useContext } from "vite-ssr/vue";
 
-const setterStore = useSetterStore()
-const setting = setterStore.setting 
+const { isClient } = useContext();
+const setterStore = toRaw(useSetterStore());
+await setterStore.loadQdSettingInfo();
+const userStore = toRaw(useUserStore());
+const setting = toRaw(setterStore.setting);
 
-const userStore = useUserStore();
 // 登录表单是否显示
 const showLoginModal = ref(false);
 // 登录表单验证规则

@@ -8,7 +8,7 @@ export const useTagStore = defineStore('tag', () => {
     const getTags = computed(()=> {
         if (tags.length == 0) {
             getTagsApi().then((res) => {
-                tags.push(...res)
+                tags.push(...res.data)
             })
         }
         return tags

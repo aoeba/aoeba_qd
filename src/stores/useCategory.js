@@ -8,7 +8,7 @@ export const useCategoryStore = defineStore('category', () => {
     const getCategories =computed(()=> {
         if (categories.length == 0) {
             getCategoriesApi().then((res) => {
-                categories.push(...res)
+                categories.push(...res.data)
             })
         }
         return categories

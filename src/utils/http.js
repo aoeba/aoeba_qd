@@ -12,7 +12,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.defaults.headers.put['Content-Type'] = 'application/json;charset=UTF-8';
 axios.defaults.headers.delete['Content-Type'] = 'application/json;charset=UTF-8';
 
-init(axios)
 /**
  * get方法，对应get请求
  * @param {String} url [请求的url地址]
@@ -107,7 +106,7 @@ export function uploadFile(url, formdata, uploadProgress) {
  * 对axios进行初始化
  * @param {axios} req axios
  */
-function init(req) {
+export function init(req=axios) {
     // 存在token时，在请求头加上token
     req.interceptors.request.use(
         config => {

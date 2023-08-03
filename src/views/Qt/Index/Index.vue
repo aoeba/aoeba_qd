@@ -41,14 +41,17 @@
             </template>
             {{ tag }}
           </t-tag>
-          <a title="清空" @click="
+          <a
+            title="清空"
+            @click="
               () => {
                 noteFilter.category = '';
                 noteFilter.tag.length = 0;
               }
-            ">
-            <!-- <font-awesome-icon icon="fa-solid fa-broom" /> -->
-            <t-icon name="clear" size="30px"/>
+            "
+          >
+            <font-awesome-icon icon="fa-solid fa-broom" />
+            <t-icon name="clear" size="30px" />
           </a>
         </div>
       </article>
@@ -81,7 +84,7 @@
               </h2>
             </header>
             <div class="kratos-entry-content-new">
-              <p itemprop="description">{{ splitString(note.content,130) }}</p>
+              <p itemprop="description">{{ splitString(note.content, 130) }}</p>
             </div>
           </div>
           <footer class="kratos-post-meta-new">
@@ -99,15 +102,15 @@
               <a>
                 <span data-path="/posts/Kratos-Rebirth/" class="waline-pageview-count">{{
                   note.readCount
-                }}</span>
-                次阅读
+                }}</span
+                >次阅读
               </a>
               <font-awesome-icon icon="fa-regular fa-comment-dots" />
               <a>
                 <span data-path="/posts/Kratos-Rebirth/" class="waline-comment-count">{{
                   note.commentCount
-                }}</span>
-                条评论
+                }}</span
+                >条评论
               </a>
             </span>
             <span class="pull-right">
@@ -148,54 +151,24 @@ import About from "../components/About";
 import Category from "../components/Category";
 import Tagcloud from "../components/Tagcloud";
 import router from "../../../router";
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, toRaw } from "vue";
 import { getNoteList, tagArrayTostr } from "@/api/note";
-import { strDateToYMD,splitString } from "@/utils";
+import { strDateToYMD, splitString } from "@/utils";
 import { getCommentsV3 } from "@/api/github";
 import { getReadCountByUrls } from "@/api/leancloud";
 import { MessagePlugin } from "tdesign-vue-next";
+import { useContext } from "vite-ssr/vue";
+import { useAsyncData } from "@/utils/httpssr";
+import { ClientOnly } from "vite-ssr";
+
+const { isClient, initialState } = useContext();
+
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
-
-const noteList = ref([]);
-
-const urlPre = window.location.protocol + "//" + window.location.host;
 const goto = (path) => {
   router.push(path);
 };
-// 查询结果回调
-const pageChangeCallback = (data) => {
-  noteList.value.length = 0;
-  noteList.value.push(...data.content);
-  pagination.total = data.total;
-  pagination.current = data.number;
-  pagination.pageSize = data.size;
-  // 获取评论数及阅读数
-  const urls = [];
-  noteList.value.forEach((value) => {
-    const id = "/note/" + value.id;
-    getCommentsV3(id)
-      .then((res) => {
-        value.commentCount = res.data.length;
-      })
-      .catch((err) => {
-        value.commentCount = 0;
-      });
-    value.readCount = 0;
-    const url = urlPre + "/note/" + value.id;
-    urls.push(url);
-  });
-  getReadCountByUrls(urls).then((res) => {
-    const countMap = new Map();
-    res.forEach((counter) => {
-      countMap.set(counter.get("pageUrl"), counter.get("PV"));
-    });
-    noteList.value.forEach((value) => {
-      const count = countMap.get(urlPre + "/note/" + value.id);
-      value.readCount = count ? count : 0;
-    });
-  });
-};
+
 // 分页对象
 const pagination = reactive({
   current: 1,
@@ -203,30 +176,26 @@ const pagination = reactive({
   total: 0,
   showJumper: true,
   onChange: (pageInfo) => {
-    getNoteList(
-      tagArrayTostr(noteFilter.tag),
-      "",
-      noteFilter.category,
-      pageInfo.current,
-      pageInfo.pageSize
-    ).then((res) => {
-      pageChangeCallback(res);
-      // 回到文章列表开始的位置
-      document.querySelector("#kratos-blog-post").scrollIntoView({ behavior: "smooth" });
-    });
+    if (isClient) {
+      getNoteList(
+        tagArrayTostr(noteFilter.tag),
+        "",
+        noteFilter.category,
+        pageInfo.current,
+        pageInfo.pageSize
+      ).then((res) => {
+        pageChangeCallback(res);
+        // 回到文章列表开始的位置
+        document
+          .querySelector("#kratos-blog-post")
+          .scrollIntoView({ behavior: "smooth" });
+      });
+    }
   },
 });
-
+const noteList = ref([]);
 // 文章总数
 const noteCount = ref(0);
-// 初始化时调用一次
-getNoteList().then((res) => {
-  pageChangeCallback(res);
-  // 文章总数
-  noteCount.value = res.total;
-  // noteFilter.tag = ''
-  // note.category = ''
-});
 // 文章查询条件
 const noteFilter = reactive({
   tag: [],
@@ -234,16 +203,15 @@ const noteFilter = reactive({
 });
 // 全屏加载
 const loading = ref(false);
-watch(noteFilter, (newValue, oldValue) => {
-  loading.value = true;
-  getNoteList(tagArrayTostr(noteFilter.tag), "", noteFilter.category)
-    .then((res) => {
-      pageChangeCallback(res);
-    })
-    .finally(() => {
-      loading.value = false;
-    });
-});
+
+let reqUrl = "/note/find?tags=&keyword=&category=&pageNo=1&pageSize=10";
+const resp = await useAsyncData("initData", reqUrl);
+const initData = toRaw(resp.value);
+noteList.value.push(...initData.data.content);
+pagination.total = initData.data.total;
+pagination.current = initData.data.number;
+pagination.pageSize = initData.data.size;
+noteCount.value = initData.data.total;
 // 点击tag时触发
 const clickTag = (value) => {
   if (noteFilter.tag.includes(value)) {
@@ -252,5 +220,54 @@ const clickTag = (value) => {
     noteFilter.tag.push(value);
   }
 };
+if (isClient) {
+  // "https://www.mk95.cn"
+  const urlPre = window.location.protocol + "//" + window.location.host;
+
+  // 查询结果回调
+  const pageChangeCallback = (resp) => {
+    noteList.value.length = 0;
+    noteList.value.push(...resp.data.content);
+    pagination.total = resp.data.total;
+    pagination.current = resp.data.number;
+    pagination.pageSize = resp.data.size;
+    // 获取评论数及阅读数
+    const urls = [];
+    noteList.value.forEach((value) => {
+      const id = "/note/" + value.id;
+      getCommentsV3(id)
+        .then((res) => {
+          value.commentCount = res.data.length;
+        })
+        .catch((err) => {
+          value.commentCount = 0;
+        });
+      value.readCount = 0;
+      const url = urlPre + "/note/" + value.id;
+      urls.push(url);
+    });
+    getReadCountByUrls(urls).then((res) => {
+      const countMap = new Map();
+      res.forEach((counter) => {
+        countMap.set(counter.get("pageUrl"), counter.get("PV"));
+      });
+      noteList.value.forEach((value) => {
+        const count = countMap.get(urlPre + "/note/" + value.id);
+        value.readCount = count ? count : 0;
+      });
+    });
+  };
+
+  watch(noteFilter, (newValue, oldValue) => {
+    loading.value = true;
+    getNoteList(tagArrayTostr(noteFilter.tag), "", noteFilter.category)
+      .then((res) => {
+        pageChangeCallback(res);
+      })
+      .finally(() => {
+        loading.value = false;
+      });
+  });
+}
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

@@ -131,9 +131,14 @@ import psr_img from "../../assets/images/psr.webp";
 import txy_wy from "../../assets/images/txy_wy.svg";
 import upyun_logo from "../../assets/images/upyun_logo.png";
 import { MessagePlugin } from "tdesign-vue-next";
+import { useContext } from "vite-ssr/vue";
+import { toRaw } from "vue";
 
-const setterStore = useSetterStore();
-const theme = setterStore.setting.theme;
+const { isClient } = useContext();
+const setterStore = toRaw(useSetterStore());
+await setterStore.loadQdSettingInfo();
+const setting = toRaw(setterStore.setting);
+const theme = setting.theme;
 
 const backTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
