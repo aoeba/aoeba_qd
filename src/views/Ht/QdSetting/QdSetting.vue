@@ -341,13 +341,14 @@ import { useSetterStore } from "@/stores/setter";
 import { reactive, onMounted, ref } from "vue";
 import { MessagePlugin } from "tdesign-vue-next";
 import { awesomeSolidIconList } from "@/setting";
-import router from "@/router";
+import { useRouter } from "vue-router";
 import { updateQdSetting } from "@/api/setting"
 
 // solid可选图标名称列表
 const iconList = ref([...awesomeSolidIconList]);
 // 路由列表
 const pathList = ref([]);
+const router = useRouter();
 router.getRoutes().forEach((el) => {
   pathList.value.push(el.path);
 });

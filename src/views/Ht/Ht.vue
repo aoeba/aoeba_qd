@@ -50,27 +50,30 @@
         </t-menu>
       </div>
       <div class="aoeba-ht-right">
-        <router-view @changeMenu="changeMenuValue"></router-view>
+        <client-only>
+          <router-view @changeMenu="changeMenuValue"></router-view>
+        </client-only>
       </div>
     </div>
   </t-layout>
 </template>
 <script setup>
 import { ref } from "vue";
-import {useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 import { useSetterStore } from "@/stores/setter";
+import { ClientOnly } from "vite-ssr/vue";
 
-const router = useRouter()
+const router = useRouter();
 const setterStore = useSetterStore();
 // 左侧控制区收缩/展开
 const collapsed = ref(false);
 const changeCollapsed = () => {
   collapsed.value = !collapsed.value;
 };
-const menuValue = ref("")
+const menuValue = ref("");
 // 子页面之间直接跳转时通知父页面改当前菜单
 const changeMenuValue = (value) => {
-  menuValue.value = value
-}
+  menuValue.value = value;
+};
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

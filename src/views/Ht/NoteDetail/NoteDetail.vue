@@ -152,7 +152,9 @@ import {
 } from "@/api/note";
 import { useCategoryStore } from "@/stores/useCategory";
 import { useTagStore } from "@/stores/useTag";
-import router from "../../../router";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 // 表格设置
 const columns = [
   { colKey: "img", title: "封面", width: 80 },
@@ -276,7 +278,7 @@ const editNote = (row) => {
 };
 // 推送到微信公众号
 const pushWxgzh = () => {
-  let { id, img } = this.noteSetFormData;
+  let { id, img } = noteSetFormData;
   let note = {
     id: id,
     img: img,
