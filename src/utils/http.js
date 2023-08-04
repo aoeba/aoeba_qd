@@ -6,7 +6,7 @@ import nProgress from "nprogress";
 // 后端环境地址，在.env.[***] 中配置的VITE_BASE_URL
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 // 设置请求超时
-axios.defaults.timeout = 10000;
+// axios.defaults.timeout = 10000;
 // 设置请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 axios.defaults.headers.put['Content-Type'] = 'application/json;charset=UTF-8';
@@ -104,37 +104,48 @@ export function uploadFile(url, formdata, uploadProgress) {
 
 /**
  * 对axios进行初始化
+ * @param {isClient} isClient 是否为客户端,默认true 
  * @param {axios} req axios
  */
-export function init(req=axios) {
+export function init(isClient = true, req = axios) {
     // 存在token时，在请求头加上token
     req.interceptors.request.use(
         config => {
             const userStore = useUserStore()
-            nProgress.inc()
+            if (isClient) {
+                nProgress.inc()
+            }
             const token = userStore.userInfo.token
             token && (config.headers.token = token)
             return config
         },
         error => {
-            nProgress.done()
+            if (isClient) {
+                nProgress.done()
+            }
             return Promise.error(error)
         }
     )
     // 响应拦截器
     req.interceptors.response.use(
         response => {
-            nProgress.done()
+            if (isClient) {
+                nProgress.done()
+            }
             if (response.data.code === 0) {
                 return Promise.resolve(response.data)
             } else {
-                MessagePlugin.error(response.data.msg)
+                if (isClient) {
+                    MessagePlugin.error(response.data.msg)
+                }
                 return Promise.reject(response.data)
             }
         },
         error => {
-            nProgress.done()
-            MessagePlugin.error(error.message)
+            if (isClient) {
+                nProgress.done()
+                MessagePlugin.error(error.message)
+            }
             // 与服务端返回类型保持一致
             const err = {
                 code: 99,

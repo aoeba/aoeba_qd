@@ -1,14 +1,15 @@
-import { reactive,computed } from 'vue'
+import { reactive, computed, toRaw } from 'vue'
 import { defineStore } from 'pinia'
-import { getTags as getTagsApi } from '@/api/note'
+import { useAsyncData } from '@/utils/httpssr'
 
 export const useTagStore = defineStore('tag', () => {
     // {name:'',size:''}
     const tags = reactive([])
-    const getTags = computed(()=> {
+    const getTags = computed(() => {
         if (tags.length == 0) {
-            getTagsApi().then((res) => {
-                tags.push(...res.data)
+            useAsyncData('tag', '/note/getTags').then(res => {
+                const t = toRaw(res.value)
+                tags.push(...t)
             })
         }
         return tags
@@ -16,5 +17,5 @@ export const useTagStore = defineStore('tag', () => {
     function addTag(tag) {
         tags.push(tag)
     }
-    return { tags,getTags, addTag }
+    return { tags, getTags, addTag }
 })

@@ -16,13 +16,17 @@
           <ul class="kratos-post-meta text-center">
             <li>
               <time datetime="2018-06-30T07:27:05.000Z" itemprop="datePublished">
-                <font-awesome-icon icon="fa-regular fa-calendar-days" />
+                <ClientOnly>
+                  <font-awesome-icon icon="fa-regular fa-calendar-days" />
+                </ClientOnly>
                 <a>{{ note.date }}</a>
               </time>
             </li>
 
             <li v-if="theme.note.wordCount?.enable">
-              <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+              </ClientOnly>
               {{ note.content.length }}字
             </li>
           </ul>
@@ -35,7 +39,9 @@
             v-if="note.expire"
           >
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-solid fa-triangle-exclamation" />
+              </ClientOnly>
             </div>
             <div class="text">
               <p>本文最后编辑于{{ note.updated }}，其中的内容可能需要更新</p>
@@ -70,7 +76,9 @@
         <footer class="kratos-entry-footer clearfix">
           <div class="footer-tag clearfix">
             <div class="pull-left">
-              <font-awesome-icon icon="fa-solid fa-tags" style="padding-right: 8px" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-solid fa-tags" style="padding-right: 8px" />
+              </ClientOnly>
               <template v-for="(tag, i) in note.tags">
                 <a class="tag-none-link" id="aoeba-note-tag" rel="tag"> {{ tag }}</a>
                 <template v-if="i < note.tags.length - 1">,</template>
@@ -99,11 +107,13 @@
           <span class="toc-progress-bar"></span>
         </h4>
         <div class="textwidget">
-          <md-catalog
-            :editorId="'md-editor'"
-            :scroll-element="scrollElement"
-            :theme="theme.editorState.theme"
-          />
+          <ClientOnly>
+            <md-catalog
+              :editorId="'md-editor'"
+              :scroll-element="scrollElement"
+              :theme="theme.editorState.theme"
+            />
+          </ClientOnly>
         </div>
       </aside>
     </div>
@@ -113,14 +123,15 @@
 import MdEditor from "md-editor-v3";
 import "md-editor-v3/lib/style.css";
 import { useSetterStore } from "../../../stores/setter";
-import { ref, onMounted, reactive } from "vue";
+import { ref, onMounted, reactive, toRaw } from "vue";
 import { useRoute } from "vue-router";
-import { getNote } from "@/api/note";
+import { useAsyncData } from "@/utils/httpssr";
 import { strDateToYMD, completeDate } from "@/utils";
 import { updateVisitorCounter } from "@/api/leancloud";
 import "gitalk/dist/gitalk.css";
 import Gitalk from "gitalk";
-import { config as githubConfig } from '@/api/github'
+import { config as githubConfig } from "@/api/github";
+import { ClientOnly } from "vite-ssr";
 
 // 编辑器需要的相关库
 // <=5.2.0
@@ -163,7 +174,7 @@ const MdCatalog = MdEditor.MdCatalog;
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
 const theme = setting.theme;
-const scrollElement = document.documentElement;
+var scrollElement = {};
 
 const note = reactive({
   title: "",
@@ -177,51 +188,52 @@ const note = reactive({
 
 const text = ref(note.content);
 const route = useRoute();
+const id = route.params.id;
+// 获取文章
+const resp = await useAsyncData("/note/" + id, "/note/" + id);
+const noteInfo = toRaw(resp.value);
+note.title = noteInfo.title;
+note.date = strDateToYMD(noteInfo.createdAt);
+let updatedAt = noteInfo.createdAt;
+if (noteInfo.updatedAt) {
+  note.updated = strDateToYMD(noteInfo.updatedAt);
+  updatedAt = noteInfo.updatedAt;
+} else {
+  note.updated = strDateToYMD(noteInfo.createdAt);
+}
+text.value = note.content = noteInfo.content;
+note.tags.length = 0;
+noteInfo.tags?.forEach((tag) => {
+  // {name:'',size:''}
+  note.tags.push(tag.name);
+});
+// 判断是否过期
+if (!completeDate(new Date(updatedAt), new Date(), 3)) {
+  note.expire = true;
+} else {
+  note.expire = false;
+}
 onMounted(() => {
-  const id = route.params.id;
-  // 获取文章
-  getNote(id).then((res) => {
-    note.title = res.title;
-    note.date = strDateToYMD(res.createdAt);
-    let updatedAt = res.createdAt;
-    if (res.updatedAt) {
-      note.updated = strDateToYMD(res.updatedAt);
-      updatedAt = res.updatedAt;
-    } else {
-      note.updated = strDateToYMD(res.createdAt);
-    }
-    text.value = note.content = res.content;
-    note.tags.length = 0;
-    res.tags?.forEach((tag) => {
-      // {name:'',size:''}
-      note.tags.push(tag.name);
-    });
-    // 判断是否过期
-    if (!completeDate(new Date(updatedAt), new Date(), 3)) {
-      note.expire = true;
-    } else {
-      note.expire = false;
-    }
-    // 统计点击量
-    const url = window.location.protocol + "//" + window.location.host + "/note/" + id;
-    updateVisitorCounter(url, note.title);
-    // 加载评论组件
-    const commentConfig = {
-      clientID: githubConfig.clientID,
-      clientSecret: githubConfig.clientSecret,
-      repo: "comments",
-      owner: githubConfig.owner,
-      // 这里接受一个数组，可以添加多个管理员，可以是你自己
-      admin: [githubConfig.owner],
-      // id 用于当前页面的唯一标识，一般来讲 pathname 足够了，
-      // 但是如果你的 pathname 超过 50 个字符，GitHub 将不会成功创建 issue，此情况可以考虑给每个页面生成 hash 值的方法.
-      id: "/note/" + id,
-      title: note.title,
-      distractionFreeMode: false,
-    };
-    const gitalk = new Gitalk(commentConfig);
-    gitalk.render("gitalk-container");
-  });
+  scrollElement = document.documentElement;
+  // 统计点击量
+  const url = window.location.protocol + "//" + window.location.host + "/note/" + id;
+  updateVisitorCounter(url, note.title);
+  // 加载评论组件
+  const commentConfig = {
+    clientID: githubConfig.clientID,
+    clientSecret: githubConfig.clientSecret,
+    repo: "comments",
+    owner: githubConfig.owner,
+    // 这里接受一个数组，可以添加多个管理员，可以是你自己
+    admin: [githubConfig.owner],
+    // id 用于当前页面的唯一标识，一般来讲 pathname 足够了，
+    // 但是如果你的 pathname 超过 50 个字符，GitHub 将不会成功创建 issue，此情况可以考虑给每个页面生成 hash 值的方法.
+    id: "/note/" + id,
+    title: note.title,
+    distractionFreeMode: false,
+  };
+  const gitalk = new Gitalk(commentConfig);
+  gitalk.render("gitalk-container");
 });
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

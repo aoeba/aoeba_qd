@@ -1,7 +1,6 @@
 import { ref, reactive, computed, watch, toRaw } from 'vue'
 import { defineStore } from 'pinia'
 import { setting as userSet } from '../setting'
-import { getQdSetting } from '@/api/setting'
 import { useContext } from "vite-ssr/vue";
 import { useAsyncData } from "@/utils/httpssr";
 
@@ -62,34 +61,22 @@ export const useSetterStore = defineStore('setting', () => {
 
     // 重新加载qsSetting信息
     const loadQdSettingInfo = async () => {
-        if (isClient) {
-            getQdSetting().then(res => {
-                if (res.data && res.data != '') {
-                    const settingData = JSON.parse(res.data)
-                    setting.config = settingData.config
-                    setting.path = settingData.path
-                    setting.webLogo = settingData.webLogo
-                    setting.theme = settingData.theme
-                    // 加载完成后重置主题样式
-                    changeThemeMode(setting.theme.modeLight ? 'light' : 'dark')
-                } else {
-                    console.log("未配置QdSetting")
-                }
-            })
-        } else {
-            const resp = await useAsyncData("setting", "/setting/qdSetting");
-            const initData = toRaw(resp.value);
-            if (initData.data && initData != '') {
-                const settingData = JSON.parse(initData.data)
-                setting.config = settingData.config
-                setting.path = settingData.path
-                setting.webLogo = settingData.webLogo
-                setting.theme = settingData.theme
-                // 加载完成后重置主题样式
-                changeThemeMode(setting.theme.modeLight ? 'light' : 'dark')
+        const resp = await useAsyncData("setting", "/setting/qdSetting");
+        const initData = toRaw(resp.value);
+        if (initData && initData != '') {
+            let settingData
+            if (initData instanceof Object) {
+                settingData = initData
+            } else {
+                settingData = JSON.parse(initData)
             }
+            setting.config = settingData.config
+            setting.path = settingData.path
+            setting.webLogo = settingData.webLogo
+            setting.theme = settingData.theme
+            // 加载完成后重置主题样式
+            changeThemeMode(setting.theme.modeLight ? 'light' : 'dark')
         }
-
     }
     return { setting, changeThemeMode, bgImage, bannerImage, aboutImage, commentBgImage, loadQdSettingInfo }
 })

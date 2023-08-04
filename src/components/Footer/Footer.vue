@@ -8,24 +8,32 @@
               <!-- Keep for compatibility 
                weibo, mail, github, qq, weixin, git, bilibili -->
               <li v-if="theme.contact.weibo" key="weibo">
-                <a target="_blank" rel="nofollow" :href="theme.contact.weibo"
-                  ><font-awesome-icon icon="fa-brands fa-weibo"
-                /></a>
+                <a target="_blank" rel="nofollow" :href="theme.contact.weibo">
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-brands fa-weibo" />
+                  </ClientOnly>
+                </a>
               </li>
               <li v-if="theme.contact.mail" key="mail">
-                <a :href="'mailto:' + theme.contact.mail"
-                  ><font-awesome-icon icon="fa-solid fa-envelope"
-                /></a>
+                <a :href="'mailto:' + theme.contact.mail">
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  </ClientOnly>
+                </a>
               </li>
               <li v-if="theme.contact.github" key="github">
                 <a target="_blank" rel="nofollow" :href="theme.contact.github">
-                  <font-awesome-icon icon="fa-brands fa-github" />
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-brands fa-github" />
+                  </ClientOnly>
                 </a>
               </li>
               <li v-if="theme.contact.qq" key="qq">
                 <t-popup placement="top">
                   <a target="_blank" rel="nofollow" :href="theme.contact.qq">
-                    <font-awesome-icon icon="fa-brands fa-qq" />
+                    <ClientOnly>
+                      <font-awesome-icon icon="fa-brands fa-qq" />
+                    </ClientOnly>
                   </a>
                   <template #content>
                     <img :src="theme.contact.qq" class="note-img-pre" />
@@ -35,7 +43,9 @@
               <li v-if="theme.contact.weixin" key="weixin">
                 <t-popup placement="top">
                   <a target="_blank" rel="nofollow" :href="theme.contact.weixin">
-                    <font-awesome-icon icon="fa-brands fa-weixin" />
+                    <ClientOnly>
+                      <font-awesome-icon icon="fa-brands fa-weixin" />
+                    </ClientOnly>
                   </a>
                   <template #content>
                     <img :src="theme.contact.weixin" class="note-img-pre" />
@@ -44,12 +54,16 @@
               </li>
               <li v-if="theme.contact.git" key="git">
                 <a target="_blank" rel="nofollow" :href="theme.contact.git">
-                  <font-awesome-icon icon="fa-brands fa-git" />
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-brands fa-git" />
+                  </ClientOnly>
                 </a>
               </li>
               <li v-if="theme.contact.bilibili" key="bilibili">
                 <a target="_blank" rel="nofollow" :href="theme.contact.bilibili">
-                  <font-awesome-icon icon="fa-brands fa-bilibili" />
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-brands fa-bilibili" />
+                  </ClientOnly>
                 </a>
               </li>
             </ul>
@@ -104,7 +118,11 @@
         <div class="tool">
           <div class="box search-box" v-if="theme.search.enable">
             <a @click="MessagePlugin.warning('暂未实现')">
-              <span><font-awesome-icon icon="fa-solid fa-search" /></span>
+              <span>
+                <ClientOnly>
+                  <font-awesome-icon icon="fa-solid fa-search" />
+                </ClientOnly>
+              </span>
             </a>
           </div>
           <div
@@ -113,13 +131,19 @@
             v-if="theme.enable_dark"
             @click="changeModeLight(!theme.modeLight)"
           >
-            <span><font-awesome-icon icon="fa-solid fa-adjust" /></span>
+            <span>
+              <ClientOnly>
+                <font-awesome-icon icon="fa-solid fa-adjust" />
+              </ClientOnly>
+            </span>
           </div>
         </div>
         <div class="box gotop-box">
-          <span :onClick="backTop"
-            ><font-awesome-icon icon="fa-solid fa-chevron-up"
-          /></span>
+          <span :onClick="backTop">
+            <ClientOnly>
+              <font-awesome-icon icon="fa-solid fa-chevron-up" />
+            </ClientOnly>
+          </span>
         </div>
       </div>
     </div>
@@ -133,6 +157,7 @@ import upyun_logo from "../../assets/images/upyun_logo.png";
 import { MessagePlugin } from "tdesign-vue-next";
 import { useContext } from "vite-ssr/vue";
 import { toRaw } from "vue";
+import { ClientOnly } from "vite-ssr";
 
 const { isClient } = useContext();
 const setterStore = toRaw(useSetterStore());

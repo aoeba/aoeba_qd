@@ -9,27 +9,33 @@
                 <template v-for="menu in setting.theme.topMenu">
                   <li>
                     <a v-if="menu.submenu?.length > 0">
-                      <font-awesome-icon
-                        :icon="'fa-solid fa-' + menu.icon"
-                        v-if="menu.icon"
-                      />
+                      <ClientOnly>
+                        <font-awesome-icon
+                          :icon="'fa-solid fa-' + menu.icon"
+                          v-if="menu.icon"
+                        />
+                      </ClientOnly>
                       {{ menu.label }}
                     </a>
-                    <a v-else @click="router.push(menu.url)">
-                      <font-awesome-icon
-                        :icon="'fa-solid fa-' + menu.icon"
-                        v-if="menu.icon"
-                      />
+                    <a v-else :href="menu.url">
+                      <ClientOnly>
+                        <font-awesome-icon
+                          :icon="'fa-solid fa-' + menu.icon"
+                          v-if="menu.icon"
+                        />
+                      </ClientOnly>
                       {{ menu.label }}
                     </a>
                     <ul class="sub-menu" v-if="menu.submenu?.length > 0">
                       <template v-for="submenu in menu.submenu">
                         <li>
-                          <a @click="router.push(submenu.url)">
-                            <font-awesome-icon
-                              :icon="'fa-solid fa-' + submenu.icon"
-                              v-if="submenu.icon"
-                            />
+                          <a :href="submenu.url">
+                            <ClientOnly>
+                              <font-awesome-icon
+                                :icon="'fa-solid fa-' + submenu.icon"
+                                v-if="submenu.icon"
+                              />
+                            </ClientOnly>
                             {{ submenu.label }}
                           </a>
                         </li>
@@ -43,25 +49,33 @@
             <ul class="aoeba-topnav-right sf-menu">
               <li v-if="!userStore.isLogin">
                 <a @click="showLoginModal = true">
-                  <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-solid fa-right-to-bracket" />
+                  </ClientOnly>
                   登录
                 </a>
               </li>
               <li v-else>
                 <a>
-                  <font-awesome-icon icon="fa-solid fa-user" />
+                  <ClientOnly>
+                    <font-awesome-icon icon="fa-solid fa-user" />
+                  </ClientOnly>
                   {{ userStore.userInfo.userName }}
                 </a>
                 <ul class="sub-menu">
                   <li>
                     <a @click="router.push('/ht')">
-                      <font-awesome-icon icon="fa-solid fa-bars-progress" />
+                      <ClientOnly>
+                        <font-awesome-icon icon="fa-solid fa-bars-progress" />
+                      </ClientOnly>
                       后台管理
                     </a>
                   </li>
                   <li>
                     <a @click="logout">
-                      <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
+                      <ClientOnly>
+                        <font-awesome-icon icon="fa-solid fa-right-from-bracket" />
+                      </ClientOnly>
                       退出
                     </a>
                   </li>
@@ -75,7 +89,7 @@
     <header id="kratos-mobile-topnav" class="kratos-topnav">
       <div class="container">
         <div class="color-logo">
-          <a @click="router.push('/')">{{ setting.config.title }}</a>
+          <a href="/">{{ setting.config.title }}</a>
         </div>
         <div class="nav-toggle">
           <a class="kratos-nav-toggle js-kratos-nav-toggle">
@@ -121,18 +135,20 @@
   </div>
 </template>
 <script setup>
-import router from "../../router";
 import { MessagePlugin } from "tdesign-vue-next";
 import { reactive, ref, toRaw } from "vue";
 import { useUserStore } from "../../stores/user";
 import { login as apiLogin } from "../../api/user.js";
-import { useSetterStore} from '@/stores/setter';
+import { useSetterStore } from "@/stores/setter";
 import { useContext } from "vite-ssr/vue";
+import { ClientOnly } from "vite-ssr";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const { isClient } = useContext();
-const setterStore = toRaw(useSetterStore());
+const setterStore = useSetterStore();
 await setterStore.loadQdSettingInfo();
-const userStore = toRaw(useUserStore());
+const userStore = useUserStore();
 const setting = toRaw(setterStore.setting);
 
 // 登录表单是否显示
@@ -164,10 +180,9 @@ const login = () => {
 };
 // 退出并返回首页
 const logout = () => {
-  userStore.logout()
+  userStore.logout();
   MessagePlugin.success("退出成功");
-  router.push('/')
-}
-
+  router.push("/");
+};
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

@@ -8,37 +8,39 @@ const Config = {
     * For Client, if {true} asyncData will try to block component's initialization
     * if {false} it will fetch the data onMounted hook.
     */
-   awaitSetup: false
+   awaitSetup: true
 }
 
 const baseUrl = "https://hd.mk95.cn"
-
+// 新创建一个对象，避免和客户端的冲突
+const _axios = axios.create()
 export async function useAsyncData(key, location, config = Config) {
    const { isClient, initialState } = useContext();
    //- craete a ref via initialState[key] value
    const responseValue = ref(initialState[key] || null);
    //- Axios get request
-   const request = () => axios.get(baseUrl+location, config?.axiosConfig);
+   const request = () => _axios.get(baseUrl+location, config?.axiosConfig);
 
    //- request handler function, to prevent code duplication I created inline function.
    const handler = async (type) => {
       try {
          const { data } = await request();
-         responseValue.value = data;
-         if (type === 'server') initialState[key] = data;
+         const resp = data.data;
+         responseValue.value = resp;
+         if (type === 'server') initialState[key] = resp;
       } catch (error) {
          throw error;
       }
    };
 
    // remove data from initialState when component unmounts or deactivates
-   onUnmounted(() => {
-      //- make sure that it is client
-      if (isClient) initialState[key] = null;
-   });
-   onDeactivated(() => {
-      if (isClient) initialState[key] = null;
-   });
+   // onUnmounted(() => {
+   //    //- make sure that it is client
+   //    if (isClient) initialState[key] = null;
+   // });
+   // onDeactivated(() => {
+   //    if (isClient) initialState[key] = null;
+   // });
 
    //- is this function running on server side
    if (!isClient) {

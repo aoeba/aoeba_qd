@@ -22,7 +22,9 @@
             class="note-filter-tag"
           >
             <template #icon>
+            <ClientOnly>
               <font-awesome-icon icon="fa-regular fa-folder" />
+            </ClientOnly>
             </template>
             {{ noteFilter.category }}
           </t-tag>
@@ -37,7 +39,9 @@
             class="note-filter-tag"
           >
             <template #icon>
+            <ClientOnly>
               <font-awesome-icon icon="fa-solid fa-tag" />
+            </ClientOnly>
             </template>
             {{ tag }}
           </t-tag>
@@ -50,7 +54,6 @@
               }
             "
           >
-            <font-awesome-icon icon="fa-solid fa-broom" />
             <t-icon name="clear" size="30px" />
           </a>
         </div>
@@ -68,17 +71,17 @@
           </div>
 
           <div class="kratos-entry-thumb-new">
-            <a @click="goto('/note/' + note.id)">
+            <a :href="'/note/' + note.id">
               <img class="kratos-entry-thumb-new-img" :src="note.img" alt="" />
             </a>
           </div>
           <div class="kratos-post-inner-new">
             <header class="kratos-entry-header-new">
-              <a class="label-link" @click="goto('/categories/' + note.category)">
+              <a class="label-link" @click="() => (noteFilter.category = note.category)">
                 {{ note.category }}</a
               >
               <h2 class="kratos-entry-title-new">
-                <a @click="goto('/note/' + note.id)" itemprop="mainEntityOfPage"
+                <a :href="'/note/' + note.id" itemprop="mainEntityOfPage"
                   ><span itemprop="name headline">{{ note.title }}</span></a
                 >
               </h2>
@@ -90,22 +93,30 @@
           <footer class="kratos-post-meta-new">
             <span class="pull-left">
               <time datetime="2018-06-30T07:27:05.000Z" itemprop="datePublished">
-                <font-awesome-icon icon="fa-regular fa-calendar-days" />
+                <ClientOnly>
+                  <font-awesome-icon icon="fa-regular fa-calendar-days" />
+                </ClientOnly>
                 <a>{{ strDateToYMD(note.createdAt) }}</a>
               </time>
-              <font-awesome-icon icon="fa-solid fa-tags" v-if="note.tags.length > 0" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-solid fa-tags" v-if="note.tags.length > 0" />
+              </ClientOnly>
               <template v-for="(tag, i) in note.tags">
                 <a class="tag-none-link" rel="tag"> {{ tag.name }}</a>
                 <template v-if="i < note.tags.length - 1">,</template>
               </template>
-              <font-awesome-icon icon="fa-regular fa-eye" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-regular fa-eye" />
+              </ClientOnly>
               <a>
                 <span data-path="/posts/Kratos-Rebirth/" class="waline-pageview-count">{{
                   note.readCount
                 }}</span
                 >次阅读
               </a>
-              <font-awesome-icon icon="fa-regular fa-comment-dots" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-regular fa-comment-dots" />
+              </ClientOnly>
               <a>
                 <span data-path="/posts/Kratos-Rebirth/" class="waline-comment-count">{{
                   note.commentCount
@@ -114,10 +125,12 @@
               </a>
             </span>
             <span class="pull-right">
-              <a class="read-more" @click="goto('/note/' + note.id)" title="阅读全文"
+              <a class="read-more" :href="'/note/' + note.id" title="阅读全文"
                 >阅读全文</a
               >
-              <font-awesome-icon icon="fa-solid fa-chevron-circle-right" />
+              <ClientOnly>
+                <font-awesome-icon icon="fa-solid fa-chevron-circle-right" />
+              </ClientOnly>
             </span>
           </footer>
         </div>
@@ -150,7 +163,6 @@ import { useSetterStore } from "../../../stores/setter";
 import About from "../components/About";
 import Category from "../components/Category";
 import Tagcloud from "../components/Tagcloud";
-import router from "../../../router";
 import { ref, reactive, watch, toRaw } from "vue";
 import { getNoteList, tagArrayTostr } from "@/api/note";
 import { strDateToYMD, splitString } from "@/utils";
@@ -160,14 +172,10 @@ import { MessagePlugin } from "tdesign-vue-next";
 import { useContext } from "vite-ssr/vue";
 import { useAsyncData } from "@/utils/httpssr";
 import { ClientOnly } from "vite-ssr";
-
 const { isClient, initialState } = useContext();
 
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
-const goto = (path) => {
-  router.push(path);
-};
 
 // 分页对象
 const pagination = reactive({
@@ -207,11 +215,8 @@ const loading = ref(false);
 let reqUrl = "/note/find?tags=&keyword=&category=&pageNo=1&pageSize=10";
 const resp = await useAsyncData("initData", reqUrl);
 const initData = toRaw(resp.value);
-noteList.value.push(...initData.data.content);
-pagination.total = initData.data.total;
-pagination.current = initData.data.number;
-pagination.pageSize = initData.data.size;
-noteCount.value = initData.data.total;
+noteList.value.push(...initData.content);
+noteCount.value = initData.total;
 // 点击tag时触发
 const clickTag = (value) => {
   if (noteFilter.tag.includes(value)) {
@@ -227,10 +232,10 @@ if (isClient) {
   // 查询结果回调
   const pageChangeCallback = (resp) => {
     noteList.value.length = 0;
-    noteList.value.push(...resp.data.content);
-    pagination.total = resp.data.total;
-    pagination.current = resp.data.number;
-    pagination.pageSize = resp.data.size;
+    noteList.value.push(...resp.content);
+    pagination.total = resp.total;
+    pagination.current = resp.number;
+    pagination.pageSize = resp.size;
     // 获取评论数及阅读数
     const urls = [];
     noteList.value.forEach((value) => {
@@ -268,6 +273,8 @@ if (isClient) {
         loading.value = false;
       });
   });
+  // 第一次要手动调用下
+  pageChangeCallback(initData);
 }
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

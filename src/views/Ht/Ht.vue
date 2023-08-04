@@ -4,7 +4,7 @@
       <div class="aoeba-ht-left">
         <t-menu expand-mutex v-model="menuValue" :collapsed="collapsed">
           <template #logo>
-            <a @click="router.push('/')">
+            <a href="/">
               <img
                 :width="collapsed ? 35 : 136"
                 :src="setterStore.setting.webLogo"
@@ -57,9 +57,10 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import router from "@/router";
+import {useRouter } from 'vue-router';
 import { useSetterStore } from "@/stores/setter";
 
+const router = useRouter()
 const setterStore = useSetterStore();
 // 左侧控制区收缩/展开
 const collapsed = ref(false);

@@ -1,14 +1,15 @@
-import { reactive,computed } from 'vue'
+import { reactive, computed, toRaw } from 'vue'
 import { defineStore } from 'pinia'
-import { getCategories as getCategoriesApi } from '@/api/note'
+import { useAsyncData } from '@/utils/httpssr'
 
 export const useCategoryStore = defineStore('category', () => {
     // {category:'',size:''}
     const categories = reactive([])
-    const getCategories =computed(()=> {
+    const getCategories = computed(() => {
         if (categories.length == 0) {
-            getCategoriesApi().then((res) => {
-                categories.push(...res.data)
+            useAsyncData('category', '/note/getCategories').then(res => {
+                const c = toRaw(res.value)
+                categories.push(...c)
             })
         }
         return categories
@@ -16,5 +17,5 @@ export const useCategoryStore = defineStore('category', () => {
     function addCategory(category) {
         categories.push(category)
     }
-    return { categories,getCategories, addCategory }
+    return { categories, getCategories, addCategory }
 })

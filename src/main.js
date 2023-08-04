@@ -16,11 +16,7 @@ import {
     faRightToBracket, faUser, faRightFromBracket, faBarsProgress, faGears, faTag
 }
     from '@fortawesome/free-solid-svg-icons'
-library.add(faGithub, faQq, faWeixin, faWeibo, faGit, faBilibili)
-library.add(faFolder, faCalendarDays, faEye, faCommentDots)
-library.add(sFolder, faTags, faChevronCircleRight, faChevronUp, faAdjust, faSearch, faHouse, faEnvelope
-    , faPenToSquare, faTriangleExclamation, faRightToBracket, faUser, faRightFromBracket, faBarsProgress
-    , faGears, faTag)
+
 import './assets/scss/kratosr.scss'
 import './assets/scss/aoeba/handle.scss'
 import "nprogress/nprogress.css";
@@ -30,6 +26,7 @@ import TDesign from 'tdesign-vue-next';
 import viteSSR, { ClientOnly } from 'vite-ssr'
 import { createHead } from '@vueuse/head';
 import devalue from '@nuxt/devalue';
+import { init } from '@/utils/http'
 
 export default viteSSR(App, {
     routes: router.routes,
@@ -47,9 +44,16 @@ export default viteSSR(App, {
             // 序列化并设置为 window.__INITIAL_STATE__
             initialState.pinia = pinia.state.value
         } else {
+            // 初始化axios
+            init()
             // 在客户端，我们恢复 state
             pinia.state.value = initialState.pinia
         }
+        library.add(faGithub, faQq, faWeixin, faWeibo, faGit, faBilibili)
+        library.add(faFolder, faCalendarDays, faEye, faCommentDots)
+        library.add(sFolder, faTags, faChevronCircleRight, faChevronUp, faAdjust, faSearch, faHouse, faEnvelope
+            , faPenToSquare, faTriangleExclamation, faRightToBracket, faUser, faRightFromBracket, faBarsProgress
+            , faGears, faTag)
         app.use(pinia)
         app.use(router)
         app.use(TDesign)

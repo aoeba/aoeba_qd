@@ -7,7 +7,7 @@
     >
       <div class="kratos-cover kratos-cover-2 text-center">
         <div class="desc desc2 animate-box">
-          <a @click="router.push(setting.path)">
+          <a :href="setting.path">
             <h2>{{ setting.config.title }}</h2>
             <br />
             <span> {{ setting.config.subtitle }} </span>
@@ -29,7 +29,6 @@
 import { ClientOnly } from "vite-ssr";
 import { useSetterStore } from "@/stores/setter";
 import { useUserStore } from "@/stores/user";
-import router from "@/router";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { onMounted, onUnmounted, toRaw } from "vue";
@@ -43,7 +42,6 @@ const userStore = toRaw(useUserStore());
 const setting = toRaw(setterStore.setting);
 
 if (isClient) {
-  console.log("开始执行客户端内容...")
   let isScrolledDown = false;
   const pageScrollDownClass = () => {
     window.requestAnimationFrame(() => {
