@@ -1,7 +1,7 @@
 #设置基础镜像
 FROM node:16.0-alpine
 CMD mkdir /work/aoeba
-#将文件内容复制
+#复制项目到工作区
 COPY ./ /work/aoeba/
 #运行命令
 WORKDIR /work/aoeba
