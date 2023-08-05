@@ -23,7 +23,7 @@
               </time>
             </li>
 
-            <li v-if="theme.note.wordCount?.enable">
+            <li v-if="setting.theme.note.wordCount?.enable">
               <ClientOnly>
                 <font-awesome-icon icon="fa-solid fa-pen-to-square" />
               </ClientOnly>
@@ -53,14 +53,17 @@
           <md-editor
             v-model="text"
             :editorId="'md-editor'"
-            :theme="theme.editorState.theme"
-            :preview-theme="theme.editorState.preTheme"
-            :code-theme="theme.editorState.codeTheme"
+            :theme="setting.theme.editorState.theme"
+            :preview-theme="setting.theme.editorState.preTheme"
+            :code-theme="setting.theme.editorState.codeTheme"
             preview-only
           />
         </div>
 
-        <div class="kratos-copyright text-center clearfix" v-if="theme.note.show_cc">
+        <div
+          class="kratos-copyright text-center clearfix"
+          v-if="setting.theme.note.show_cc"
+        >
           <h5 itemprop="copyrightNotice">
             本作品采用
             <a
@@ -108,10 +111,10 @@
         </h4>
         <div class="textwidget">
           <ClientOnly>
-            <md-catalog
+            <MdCatalog
               :editorId="'md-editor'"
               :scroll-element="scrollElement"
-              :theme="theme.editorState.theme"
+              :theme="setting.theme.editorState.theme"
             />
           </ClientOnly>
         </div>
@@ -173,7 +176,6 @@ MdEditor.config({
 const MdCatalog = MdEditor.MdCatalog;
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
-const theme = setting.theme;
 var scrollElement = {};
 
 const note = reactive({

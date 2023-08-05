@@ -96,9 +96,9 @@
     <md-editor
       v-model="text"
       :editorId="'md-editor'"
-      :theme="theme.editorState.theme"
-      :preview-theme="theme.editorState.preTheme"
-      :code-theme="theme.editorState.codeTheme"
+      :theme="setting.theme.editorState.theme"
+      :preview-theme="setting.theme.editorState.preTheme"
+      :code-theme="setting.theme.editorState.codeTheme"
       @onUploadImg="onUploadImg"
     />
   </div>
@@ -152,7 +152,6 @@ MdEditor.config({
 
 const setterStore = useSetterStore();
 const setting = setterStore.setting;
-const theme = setting.theme;
 // 文章内容
 const text = ref("");
 // 插槽，用于接收从路由中传来的文章id

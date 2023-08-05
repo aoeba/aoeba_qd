@@ -1,5 +1,5 @@
 import { useContext } from 'vite-ssr/vue';
-import { onMounted, onUnmounted, ref, onDeactivated } from 'vue';
+import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
 const Config = {
