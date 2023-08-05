@@ -3,9 +3,9 @@ FROM node:16.0-alpine
 CMD mkdir /work/aoeba
 #将dist文件内容复制
 COPY ./ /work/aoeba/
-#运行vite命令
+#运行命令
 WORKDIR /work/aoeba
 RUN npm install
-ENTRYPOINT npm run prod
-
-EXPOSE 5173
+RUN npm run build:ssr
+ENTRYPOINT npm start
+EXPOSE 8899
