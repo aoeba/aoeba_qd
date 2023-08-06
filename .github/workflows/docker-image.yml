@@ -12,14 +12,14 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2 # pull代码到运行服务器上
+    - uses: actions/checkout@v3 # pull代码到运行服务器上
 
     - name: Build and Push Docker Image
       env:
         IMAGE_TAG: ${{ github.sha }} # 用于标记容器版本号
+        ALIYUN_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+        ALIYUN_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       run: |
-        docker version
-        # 登录阿里云镜像仓库
-        docker login --username=${{ secrets.REGISTRY_USERNAME }} --password=${{ secrets.REGISTRY_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
+        docker login --username=$ALIYUN_USERNAME --password=$ALIYUN_PASSWORD registry.cn-hangzhou.aliyuncs.com
         docker build -t registry.cn-hangzhou.aliyuncs.com/yonghaoy/aoeba_qd:$IMAGE_TAG .
         docker push registry.cn-hangzhou.aliyuncs.com/yonghaoy/aoeba_qd:$IMAGE_TAG
