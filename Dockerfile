@@ -1,5 +1,5 @@
 #设置基础镜像
-FROM node:16.0-alpine
+FROM node:18.12.1-alpine3.16
 CMD mkdir /work/aoeba
 #复制项目到工作区
 COPY ./ /work/aoeba/

@@ -13,10 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3 # pull代码到运行服务器上
-
+    - name: image tag
+      run:  echo "SHORT_SHA=`echo ${{github.sha}} | cut -c1-8`" >> $GITHUB_ENV
     - name: Build and Push Docker Image
       env:
-        IMAGE_TAG: ${{ github.sha }} # 用于标记容器版本号
+        IMAGE_TAG: ${SHORT_SHA} # 用于标记容器版本号
         ALIYUN_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
         ALIYUN_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       run: |
