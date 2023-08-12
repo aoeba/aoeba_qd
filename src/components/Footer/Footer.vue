@@ -1,66 +1,70 @@
 <template>
   <footer>
-    <div id="footer" :class="theme.aplayer.enabled ? 'ap-lrc' : ''">
+    <div id="footer" :class="setting.theme.aplayer.enabled ? 'ap-lrc' : ''">
       <div class="container">
         <div class="row">
           <div class="col-md-6 col-md-offset-3 footer-list text-center">
             <ul class="kratos-social-icons">
               <!-- Keep for compatibility 
                weibo, mail, github, qq, weixin, git, bilibili -->
-              <li v-if="theme.contact.weibo" key="weibo">
-                <a target="_blank" rel="nofollow" :href="theme.contact.weibo">
+              <li v-if="setting.theme.contact.weibo" key="weibo">
+                <a target="_blank" rel="nofollow" :href="setting.theme.contact.weibo">
                   <ClientOnly>
                     <font-awesome-icon icon="fa-brands fa-weibo" />
                   </ClientOnly>
                 </a>
               </li>
-              <li v-if="theme.contact.mail" key="mail">
-                <a :href="'mailto:' + theme.contact.mail">
+              <li v-if="setting.theme.contact.mail" key="mail">
+                <a :href="'mailto:' + setting.theme.contact.mail">
                   <ClientOnly>
                     <font-awesome-icon icon="fa-solid fa-envelope" />
                   </ClientOnly>
                 </a>
               </li>
-              <li v-if="theme.contact.github" key="github">
-                <a target="_blank" rel="nofollow" :href="theme.contact.github">
+              <li v-if="setting.theme.contact.github" key="github">
+                <a target="_blank" rel="nofollow" :href="setting.theme.contact.github">
                   <ClientOnly>
                     <font-awesome-icon icon="fa-brands fa-github" />
                   </ClientOnly>
                 </a>
               </li>
-              <li v-if="theme.contact.qq" key="qq">
-                <t-popup placement="top">
-                  <a target="_blank" rel="nofollow" :href="theme.contact.qq">
-                    <ClientOnly>
+              <li v-if="setting.theme.contact.qq" key="qq">
+                <ClientOnly>
+                  <t-popup placement="top">
+                    <a target="_blank" rel="nofollow" :href="setting.theme.contact.qq">
                       <font-awesome-icon icon="fa-brands fa-qq" />
-                    </ClientOnly>
-                  </a>
-                  <template #content>
-                    <img :src="theme.contact.qq" class="note-img-pre" />
-                  </template>
-                </t-popup>
+                    </a>
+                    <template #content>
+                      <img :src="setting.theme.contact.qq" class="note-img-pre" />
+                    </template>
+                  </t-popup>
+                </ClientOnly>
               </li>
-              <li v-if="theme.contact.weixin" key="weixin">
-                <t-popup placement="top">
-                  <a target="_blank" rel="nofollow" :href="theme.contact.weixin">
-                    <ClientOnly>
+              <li v-if="setting.theme.contact.weixin" key="weixin">
+                <ClientOnly>
+                  <t-popup placement="top">
+                    <a
+                      target="_blank"
+                      rel="nofollow"
+                      :href="setting.theme.contact.weixin"
+                    >
                       <font-awesome-icon icon="fa-brands fa-weixin" />
-                    </ClientOnly>
-                  </a>
-                  <template #content>
-                    <img :src="theme.contact.weixin" class="note-img-pre" />
-                  </template>
-                </t-popup>
+                    </a>
+                    <template #content>
+                      <img :src="setting.theme.contact.weixin" class="note-img-pre" />
+                    </template>
+                  </t-popup>
+                </ClientOnly>
               </li>
-              <li v-if="theme.contact.git" key="git">
-                <a target="_blank" rel="nofollow" :href="theme.contact.git">
+              <li v-if="setting.theme.contact.git" key="git">
+                <a target="_blank" rel="nofollow" :href="setting.theme.contact.git">
                   <ClientOnly>
                     <font-awesome-icon icon="fa-brands fa-git" />
                   </ClientOnly>
                 </a>
               </li>
-              <li v-if="theme.contact.bilibili" key="bilibili">
-                <a target="_blank" rel="nofollow" :href="theme.contact.bilibili">
+              <li v-if="setting.theme.contact.bilibili" key="bilibili">
+                <a target="_blank" rel="nofollow" :href="setting.theme.contact.bilibili">
                   <ClientOnly>
                     <font-awesome-icon icon="fa-brands fa-bilibili" />
                   </ClientOnly>
@@ -74,11 +78,17 @@
                 </li>
               </div>
               <div>
-                <li v-if="theme.storage?.url">
+                <li v-if="setting.theme.storage?.url">
                   本网站由
-                  <a :href="theme.storage.url" rel="external nofollow" target="_blank">
+                  <a
+                    :href="setting.theme.storage.url"
+                    rel="external nofollow"
+                    target="_blank"
+                  >
                     <img
-                      :src="theme.storage.img ? theme.storage.img : upyun_logo"
+                      :src="
+                        setting.theme.storage.img ? setting.theme.storage.img : upyun_logo
+                      "
                       height="14"
                       loading="lazy"
                       decoding="auto"
@@ -86,27 +96,31 @@
                   </a>
                   提供CDN加速/云存储服务
                 </li>
-                <li v-if="theme.hoster?.text">
+                <li v-if="setting.theme.hoster?.text">
                   部署于
-                  <a :href="theme.hoster.url" rel="external nofollow" target="_blank">
+                  <a
+                    :href="setting.theme.hoster.url"
+                    rel="external nofollow"
+                    target="_blank"
+                  >
                     <img
-                      :src="theme.hoster.img ? theme.hoster.img : txy_wy"
+                      :src="setting.theme.hoster.img ? setting.theme.hoster.img : txy_wy"
                       height="14"
                       loading="lazy"
                       decoding="auto"
                     />
-                    {{ theme.hoster.text }}
+                    {{ setting.theme.hoster.text }}
                   </a>
                 </li>
               </div>
-              <div v-if="theme.icp">
+              <div v-if="setting.theme.icp">
                 <li>
                   <a
                     href="https://beian.miit.gov.cn"
                     rel="external nofollow"
                     target="_blank"
                     ><img :src="psr_img" height="14" loading="lazy" decoding="auto" />
-                    {{ theme.icp }}
+                    {{ setting.theme.icp }}
                   </a>
                 </li>
               </div>
@@ -116,8 +130,8 @@
       </div>
       <div class="kr-tool text-center">
         <div class="tool">
-          <div class="box search-box" v-if="theme.search.enable">
-            <a @click="MessagePlugin.warning('暂未实现')">
+          <div class="box search-box" v-if="setting.theme.search.enable">
+            <a @click="changeSearchVisible">
               <span>
                 <ClientOnly>
                   <font-awesome-icon icon="fa-solid fa-search" />
@@ -128,8 +142,8 @@
           <div
             class="box theme-box"
             id="darkmode-switch"
-            v-if="theme.enable_dark"
-            @click="changeModeLight(!theme.modeLight)"
+            v-if="setting.theme.enable_dark"
+            @click="changeModeLight(!setting.theme.modeLight)"
           >
             <span>
               <ClientOnly>
@@ -147,6 +161,11 @@
         </div>
       </div>
     </div>
+    <ClientOnly>
+      <t-dialog v-model:visible="searchVisible" :footer="false" :header="false">
+        <Search />
+      </t-dialog>
+    </ClientOnly>
   </footer>
 </template>
 <script setup>
@@ -154,16 +173,16 @@ import { useSetterStore } from "../../stores/setter";
 import psr_img from "../../assets/images/psr.webp";
 import txy_wy from "../../assets/images/txy_wy.svg";
 import upyun_logo from "../../assets/images/upyun_logo.png";
-import { MessagePlugin } from "tdesign-vue-next";
 import { useContext } from "vite-ssr/vue";
-import { toRaw } from "vue";
+import { toRaw, ref } from "vue";
 import { ClientOnly } from "vite-ssr";
+import Search from "@/components/Search";
 
+const searchVisible = ref(false);
 const { isClient } = useContext();
 const setterStore = toRaw(useSetterStore());
 await setterStore.loadQdSettingInfo();
 const setting = toRaw(setterStore.setting);
-const theme = setting.theme;
 
 const backTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -171,7 +190,7 @@ const backTop = () => {
 
 const changeModeLight = (modeLight) => {
   let mode = "light";
-  theme.modeLight = modeLight;
+  setting.theme.modeLight = modeLight;
   if (modeLight) {
     mode = "light";
   } else {
@@ -180,8 +199,12 @@ const changeModeLight = (modeLight) => {
   setterStore.changeThemeMode(mode);
 };
 
-changeModeLight(theme.modeLight);
+changeModeLight(setting.theme.modeLight);
 
 const year = new Date().getFullYear();
+
+const changeSearchVisible = () => {
+  searchVisible.value = !searchVisible.value;
+};
 </script>
 <style scoped lang="scss" src="./style.scss"></style>

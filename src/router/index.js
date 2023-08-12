@@ -13,6 +13,9 @@ const router = {
       }, {
         path: '/note/:id',
         component: () => import('../views/Qt/Note')
+      }, {
+        path: '/archives',
+        component: () => import('../views/Qt/Archives')
       }]
     }, {
       path: '/ht',

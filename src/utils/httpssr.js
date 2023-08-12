@@ -11,7 +11,7 @@ const Config = {
    awaitSetup: true
 }
 
-const baseUrl = "https://hd.mk95.cn"
+const baseUrl = import.meta.env.VITE_BASE_URL
 // 新创建一个对象，避免和客户端的冲突
 const _axios = axios.create()
 export async function useAsyncData(key, location, config = Config) {
