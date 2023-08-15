@@ -24,3 +24,4 @@ jobs:
         docker login --username=$ALIYUN_USERNAME --password=$ALIYUN_PASSWORD registry.cn-hangzhou.aliyuncs.com
         docker build -t registry.cn-hangzhou.aliyuncs.com/yonghaoy/aoeba_qd:$IMAGE_TAG .
         docker push registry.cn-hangzhou.aliyuncs.com/yonghaoy/aoeba_qd:$IMAGE_TAG
+        echo "镜像地址：registry.cn-hangzhou.aliyuncs.com/yonghaoy/aoeba_qd:`$IMAGE_TAG`"
