@@ -27,7 +27,6 @@ import viteSSR, { ClientOnly } from 'vite-ssr'
 import { createHead } from '@vueuse/head';
 import devalue from '@nuxt/devalue';
 import { init } from '@/utils/http'
-import InstantSearch from 'vue-instantsearch/vue3/es';
 
 export default viteSSR(App, {
     routes: router.routes,
@@ -59,7 +58,6 @@ export default viteSSR(App, {
         app.use(router)
         app.use(TDesign)
         app.use(head)
-        app.use(InstantSearch)
         app.component(ClientOnly.name, ClientOnly)
         app.component('font-awesome-icon', FontAwesomeIcon)
         app.config.errorHandler = function (error, vm, info) {
