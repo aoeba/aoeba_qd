@@ -29,7 +29,8 @@ export async function useAsyncData(key, location, config = Config) {
          responseValue.value = resp;
          if (type === 'server') initialState[key] = resp;
       } catch (error) {
-         throw error;
+         console.log(error);
+         // throw error;
       }
    };
 

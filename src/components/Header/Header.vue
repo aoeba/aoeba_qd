@@ -47,6 +47,9 @@
             </ul>
             <!-- 顶部导航栏右边 -->
             <ul class="aoeba-topnav-right sf-menu">
+              <li style="height: 100%;display: flex;align-items: center">
+                <Search />
+              </li>
               <li v-if="!userStore.isLogin">
                 <a @click="showLoginModal = true">
                   <ClientOnly>
@@ -143,6 +146,7 @@ import { useSetterStore } from "@/stores/setter";
 import { useContext } from "vite-ssr/vue";
 import { ClientOnly } from "vite-ssr";
 import { useRouter } from "vue-router";
+import Search from "@/components/Search";
 
 const router = useRouter();
 const { isClient } = useContext();

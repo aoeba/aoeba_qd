@@ -62,6 +62,9 @@ export default viteSSR(App, {
         app.use(InstantSearch)
         app.component(ClientOnly.name, ClientOnly)
         app.component('font-awesome-icon', FontAwesomeIcon)
+        app.config.errorHandler = function (error, vm, info) {
+            console.error('Global Error Handler:', error, vm, info);
+        }
         // app.mount('#kratos-wrapper')
         // // 必须由用户设置
         // if (isClient) {

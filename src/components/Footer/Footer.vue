@@ -130,7 +130,7 @@
       </div>
       <div class="kr-tool text-center">
         <div class="tool">
-          <div class="box search-box" v-if="setting.theme.search.enable">
+          <!-- <div class="box search-box" v-if="setting.theme.search.enable">
             <a @click="changeSearchVisible">
               <span>
                 <ClientOnly>
@@ -138,7 +138,7 @@
                 </ClientOnly>
               </span>
             </a>
-          </div>
+          </div> -->
           <div
             class="box theme-box"
             id="darkmode-switch"
@@ -161,11 +161,6 @@
         </div>
       </div>
     </div>
-    <ClientOnly>
-      <t-dialog v-model:visible="searchVisible" :footer="false" :header="false">
-        <Search />
-      </t-dialog>
-    </ClientOnly>
   </footer>
 </template>
 <script setup>
@@ -173,13 +168,9 @@ import { useSetterStore } from "../../stores/setter";
 import psr_img from "../../assets/images/psr.webp";
 import txy_wy from "../../assets/images/txy_wy.svg";
 import upyun_logo from "../../assets/images/upyun_logo.png";
-import { useContext } from "vite-ssr/vue";
-import { toRaw, ref } from "vue";
+import { toRaw } from "vue";
 import { ClientOnly } from "vite-ssr";
-import Search from "@/components/Search";
 
-const searchVisible = ref(false);
-const { isClient } = useContext();
 const setterStore = toRaw(useSetterStore());
 await setterStore.loadQdSettingInfo();
 const setting = toRaw(setterStore.setting);
@@ -203,8 +194,5 @@ changeModeLight(setting.theme.modeLight);
 
 const year = new Date().getFullYear();
 
-const changeSearchVisible = () => {
-  searchVisible.value = !searchVisible.value;
-};
 </script>
 <style scoped lang="scss" src="./style.scss"></style>
